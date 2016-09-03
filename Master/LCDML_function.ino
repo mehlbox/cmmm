@@ -625,55 +625,6 @@ void FUNC_Spule(void)
   }
 }
 
-/*
-void FUNC_Spule_alt(void)
-{ 
-  static float SPULE_neu;
-  if(!LCDML.FuncInit()) {
-    cursorOn = true;
-    menu = 0;
-    SPULE_neu = SPULE;
-  } 
-  if (menu == 0) {
-    lcd.clear();
-    lcd.setCursor(0,0); lcd.print(F("\176Spule:"));
-    lcd.setCursor(0,1); lcd.print(F("Durchmesser"));
-    lcd.setCursor(20,0); lcd.print(F("in mm:"));
-    menu = 2;
-  }
-
-  if (menu == 1) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    SPULE_neu = SPULE_neu + 0.01; menu = 2; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  SPULE_neu = SPULE_neu - 0.01; menu = 2; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); SPULE_neu = SPULE_neu / 10; menu = 2; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  SPULE_neu = SPULE_neu * 10; menu = 2; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 15; }
-  }
-
-  if (menu == 2) {
-      if (SPULE_neu < 0) SPULE_neu = 0;
-      lcd.setCursor(27,0); lcd.print(SPULE_neu); 
-      lcd.print((char)0x7F); lcd.print(F(" "));
-      lcd.setCursor(31,0);
-      menu = 1;
-  }
-    
-  if (menu == 15) {
-    unsigned long zwischenergebnis;
-    zwischenergebnis = SPULE_neu * 1000;
-    save(106, zwischenergebnis);// Spulendurchmesser
-    state = 0; // reinitialisieren
-    menu = 99;
-    animation();
-  }
-
-  if (menu == 99) {
-    cursorOn = false;
-    LCDML.FuncEnd(1, 0, 0, 0, 0, 0);  // (direct, enter, up, down, left, right)
-  }
-}
-*/
-
 void FUNC_motoren(void)
 { 
   static long motorSpeed_neu;
@@ -823,9 +774,6 @@ void FUNC_back(void){
 }
 
 void FUNC_motorStop(void){
-  //LCDML.FuncInit();            // setup function 
-  //LCDML.Button_quit(2);        // quit button   
-  //LCDML.FuncEnd(1,0,0,0,0,0);  // direct func end
       Wire.beginTransmission(0);
       Wire.write(0);
       Wire.endTransmission();
