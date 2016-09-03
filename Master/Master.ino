@@ -26,8 +26,8 @@
 /* lib config */
 #define _LCDMenuLib_cfg_initscreen       0      /* 0=disable, 1=enable */
 #define _LCDMenuLib_cfg_initscreen_time  5000   /* 0=time disabled, >0 wait time in ms */
-#define _LCDMenuLib_cfg_scrollbar	 1      	/* 0=no scrollbar, 1=complex scrollbar, 2=easy scrollbar */
-#define _LCDMenuLib_cfg_lcd_standard	 0      /* 0=HD44780 standard / 1=HD44780U standard */
+#define _LCDMenuLib_cfg_scrollbar	 1      	    /* 0=no scrollbar, 1=complex scrollbar, 2=easy scrollbar */
+#define _LCDMenuLib_cfg_lcd_standard	 0        /* 0=HD44780 standard / 1=HD44780U standard */
 #define _LCDMenuLib_cfg_press_time       50     /* button press time in ms */
 
 // Menue
@@ -524,20 +524,20 @@ Für die restlichen Speicherplätze siehe funktion newHardware()
 */
 
 void newHardware() {
-  save(0,  2200);// Aktuelle Position
-  save(128,5000);// Aktuelle Position
-  save(101, 0);    // gesamtbreite
+  save(0,   2200); // Aktuelle Position
+  save(128, 5000); // Aktuelle Position
+  save(101,    0); // gesamtbreite
   save(102, 8000); // gesamttiefe
   save(103, 5800); // gesamthoehe
   save(104, 3500); // maxhoehe
   save(105, 1000); // minhoehe
-  save(106, 29500);// Spulendurchmesser-alt / trotzdem noch newHardware Erkennung
-  save(107, 1);    // Aktuelle gewählter Slot
-  save(108, 1000); // Geschwindigkeit
+  save(106,29500); // Spulendurchmesser-alt / trotzdem noch newHardware Erkennung
+  save(107,   1);  // Aktuelle gewählter Slot
+  save(108, 800);  // Geschwindigkeit
   save(109, 29500);// Spulendurchmesser vorne
   save(110,150000);// Spulendurchmesser hinten
-  EEPROM.write(1022,27); // Ratio. Teil von Slot 255
-  EEPROM.write(1023,1); // Gang.  Teil von Slot 255
+  EEPROM.write(1022,27); // Ratio. Teil von Slot 255  Planetgetriebe auf Motor montiert...
+  EEPROM.write(1023, 1); // Gang.  Teil von Slot 255  Gang 1,2,4 volle, halbe, viertel Schritte. Leiser aber auch schwächer...
 }
 
 int expo(int m, int n) {  // berechnet m hoch n
@@ -551,12 +551,12 @@ void checkError() { //selbstdiagnose
   byte fehler;
   int stat1, stat3, span1, span3;
   static unsigned long errorMillis;
-  if (demo == false) {
+  if (demo == false) { /keine Fehler im Demo prüfen.
     stat1 = motorstatus(1);
     stat3 = motorstatus(3);
     span1 = spannung(1);
     span3 = spannung(3);
-    if (stat1 == '#' || stat3 == '#' || span1 < 8 || span3 < 8) {
+    if (stat1 == '#' || stat3 == '#' || span1 < 8 || span3 < 8) { // Angabe Spannung in Volt
       fehler = true;
       lcd.noCursor();
       lcd.clear();
@@ -582,7 +582,7 @@ void checkError() { //selbstdiagnose
       }
     }
   } else {
-    Wire.beginTransmission(0); Wire.write(0); Wire.endTransmission(); // Motoren im Demo Modus permanent stoppen.
+    Wire.beginTransmission(0); Wire.write(0); Wire.endTransmission(); // Motoren im Demo Modus permanent Stop Signal schicken.
     if (millis() > 60000) demo = false; // Demo Modus nach einer Minuten verlassen.
   }
 }
