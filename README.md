@@ -11,5 +11,4 @@ The coordinates are height and depth from stage edge. Input your desired coordin
 
 - Use 1k pullup resisrtor for i2c bus to achieve long wiring. I get about 50m bus lengh with 1k pull up on a simple telephon wire.
 
-# Version 0.5
-First released version. It is usable exept little bugs inside admin interface.
+- Use master branch for a working version. It is usable exept some cosmetic bugs on control panel.
