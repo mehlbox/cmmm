@@ -12,3 +12,13 @@ The coordinates are height and depth from stage edge. Input your desired coordin
 - Use 1k pullup resisrtor for i2c bus to achieve long wiring. I get about 50m bus lengh with 1k pull up on a simple telephon wire.
 
 - Use master branch for a working version. It is usable exept some cosmetic bugs on control panel.
+
+## Hardware
+Master unit:
+- Arduino ATmega328P or clone
+- 20X4 LCD display module with HD44780 controller
+- Buttons: left, right, up, down, esc, enter
+
+Slave unit: (2x)
+- Arduino ATmega328P or clone
+- A4988 stepper motor driver (2x)
