@@ -22,3 +22,4 @@ Master unit:
 Slave unit: (2x)
 - Arduino ATmega328P or clone
 - A4988 or compatible stepper motor driver (2x)
+- Stepper motor with gear (2x)
