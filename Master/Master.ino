@@ -239,6 +239,7 @@ void loop() {
     hoehe_mm = temp_hoehe;
     tiefe_mm = temp_tiefe;
     state = 1;
+    FUNC_back(); // Menü neu aufbauen.
     fadeState = true;
   }
 }
