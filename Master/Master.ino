@@ -205,13 +205,16 @@ void loop() {
     if(fadeValue == 0) lcd.clear(); // Licht ist komplett aus. Display löschen.
   }
   
-  if(!digitalRead(A2) && pultState == 1) { // Mischpult ausgeschaltet. Mikrofone anheben.
-    pultState = 0;
-    hoehe_mm = hoehe_mm + 1000;
-    if (hoehe_mm == -1) hoehe_mm = 2000;
-    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
-    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
+  if(!digitalRead(A2) && pultState == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
+    long temp_hoehe, temp_tiefe;
     checkError();
+    pultState = 0;
+    // Tiefe nicht ändern
+    temp_hoehe = load(100);
+    if (temp_hoehe == -1) temp_hoehe = 3000;
+    if (temp_hoehe > maxhoehe) temp_hoehe = maxhoehe;
+    if (temp_hoehe < minhoehe) temp_hoehe = minhoehe;
+    hoehe_mm = temp_hoehe;
     state = 1;
     fadeState = true;
   }
@@ -228,10 +231,10 @@ void loop() {
     slot = load(107);
     temp_hoehe = load(slot);
     temp_tiefe = load(slot+128);
-    if (temp_hoehe == -1) temp_hoehe = 2500;
+    if (temp_hoehe == -1) temp_hoehe = 2200;
     if (temp_hoehe > maxhoehe) temp_hoehe = maxhoehe;
     if (temp_hoehe < minhoehe) temp_hoehe = minhoehe;
-    if (temp_tiefe == -1) temp_tiefe = 0;
+    if (temp_tiefe == -1) temp_tiefe = 5000;
     if (temp_tiefe > gesamttiefe) temp_tiefe = gesamttiefe;
     hoehe_mm = temp_hoehe;
     tiefe_mm = temp_tiefe;
@@ -520,18 +523,18 @@ Für die restlichen Speicherplätze siehe funktion newHardware()
 */
 
 void newHardware() {
-  save(0,  2500);// Aktuelle Position
-  save(128,   0);// Aktuelle Position
+  save(0,  2200);// Aktuelle Position
+  save(128,5000);// Aktuelle Position
   save(101, 0);    // gesamtbreite
   save(102, 8000); // gesamttiefe
   save(103, 5800); // gesamthoehe
-  save(104, 4000); // maxhoehe
+  save(104, 3500); // maxhoehe
   save(105, 1000); // minhoehe
   save(106, 29500);// Spulendurchmesser-alt / trotzdem noch newHardware Erkennung
   save(107, 1);    // Aktuelle gewählter Slot
   save(108, 1000); // Geschwindigkeit
   save(109, 29500);// Spulendurchmesser vorne
-  save(110,170000);// Spulendurchmesser hinten
+  save(110,150000);// Spulendurchmesser hinten
   EEPROM.write(1022,27); // Ratio. Teil von Slot 255
   EEPROM.write(1023,1); // Gang.  Teil von Slot 255
 }
