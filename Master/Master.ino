@@ -138,7 +138,7 @@ void loop() {
     }   
   }
 
-  if (state == 0) { // initialisierung (siehe auch Funktion newHardware())
+  if (state == 0) { // initialisierung - letzte Position laden
     checkError();
     hoehe_mm = load(0);
     tiefe_mm = load(0+128);
@@ -150,10 +150,17 @@ void loop() {
     maxtiefe  = load(106);
     mintiefe  = load(107);
 
-    slot = load(120);
+    if (hoehe_mm == -1) hoehe_mm = 2200;
+    if (tiefe_mm == -1) tiefe_mm = 5000;
+    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
+    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
+    if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
+    if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
+    
     motorSpeed = load(108);
     SPULEv = load(109) * 0.001;
     SPULEh = load(110) * 0.001;
+    slot = load(120);
     sendLong(motorSpeed, 0, 9);
     ratio = EEPROM.read(1022);
       Wire.beginTransmission(0); //sende Ratio
@@ -170,6 +177,8 @@ void loop() {
 
   if (state == 1) { // Neue Werte erhalten
       checkError();
+      if (hoehe_mm != load(0    )) save(0,     hoehe_mm); // Neue Position in EEPROM speichern
+      if (tiefe_mm != load(0+128)) save(0+128, tiefe_mm); // Neue Position in EEPROM speichern
       CoordinateTOline(hoehe_mm, tiefe_mm); //Zielwerte berechnen
       sendTargetValue(); // Einstellungen via broadcasting versenden
       state = 2;
@@ -194,8 +203,6 @@ void loop() {
    }
   
   if(state == 3 && millis() - sleepMillis >= 1000) { // abwarten nach Position erreicht - fertig
-    if (hoehe_mm != load(0    )) save(0,     hoehe_mm); // Aktuelle Position in EEPROM speichern
-    if (tiefe_mm != load(0+128)) save(0+128, tiefe_mm); // Aktuelle Position in EEPROM speichern
     checkError();
     state = 4;
   }
@@ -224,21 +231,10 @@ void loop() {
     checkError();
   }
   
-  if(digitalRead(A2) && hardwareLock == 0) { // Mischpult eingeschaltet.. letzten Slot laden
-    long temp_hoehe, temp_tiefe;
+  if(digitalRead(A2) && hardwareLock == 0) { // Mischpult eingeschaltet.. letzte Position laden
     checkError();
     hardwareLock = 1;
-    slot = load(120);
-    temp_hoehe = load(slot);
-    temp_tiefe = load(slot+128);
-    if (temp_hoehe == -1) temp_hoehe = 2200;
-    if (temp_hoehe > maxhoehe) temp_hoehe = maxhoehe;
-    if (temp_hoehe < minhoehe) temp_hoehe = minhoehe;
-    if (temp_tiefe == -1) temp_tiefe = 5000;
-    if (temp_tiefe > gesamttiefe) temp_tiefe = gesamttiefe;
-    hoehe_mm = temp_hoehe;
-    tiefe_mm = temp_tiefe;
-    state = 1;
+    state = 0;
     FUNC_back(); // Menü neu aufbauen.
     fadeState = true;
   }
