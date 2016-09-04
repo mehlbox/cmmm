@@ -5,6 +5,9 @@
   lcd.print("\342"); //ß
 */
 
+/* github test */
+// add something
+
 /* include libs */
 #include <Wire.h>
 #include <LiquidCrystal.h>
