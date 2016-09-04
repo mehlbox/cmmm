@@ -255,7 +255,6 @@ void FUNC_MinMax(void)
   if (menu == 5) {
     if (maxhoehe_neu < 0) maxhoehe_neu = 0;
     if (maxhoehe_neu < minhoehe_neu) maxhoehe_neu = minhoehe_neu;
-    if (maxhoehe_neu > gesamthoehe) maxhoehe_neu = gesamthoehe;
     lcd.setCursor(30,0); lcdspace(maxhoehe_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 4;
@@ -302,7 +301,6 @@ void FUNC_MinMax(void)
   if (menu == 11) {
     if (maxtiefe_neu < 0) maxtiefe_neu = 0;
     if (maxtiefe_neu < mintiefe_neu) maxtiefe_neu = mintiefe_neu;
-    if (maxtiefe_neu > gesamttiefe) maxtiefe_neu = gesamttiefe;
     lcd.setCursor(30,0); lcdspace(maxtiefe_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 10;

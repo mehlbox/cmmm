@@ -63,8 +63,7 @@ void FUNC_laden(void) {
       if (temp_hoehe > maxhoehe) temp_hoehe = maxhoehe;
       if (temp_hoehe < minhoehe) temp_hoehe = minhoehe;
       if (temp_tiefe == -1) temp_tiefe = 0;
-      if (temp_tiefe > maxtiefe) temp_tiefe = maxtiefe;
-      if (temp_tiefe < mintiefe) temp_tiefe = mintiefe;
+      if (temp_tiefe > gesamttiefe) temp_tiefe = gesamttiefe;
       lcd.setCursor(10,0); lcdspace(select_slot);
       lcd.setCursor(10,1); lcdspace(temp_hoehe);
       lcd.setCursor(30,0); lcdspace(temp_tiefe);
@@ -140,14 +139,13 @@ void FUNC_einstellen(void)
 
   if (menu == 5) {
     if (tiefe_neu < 0) tiefe_neu = 0;
-    if (tiefe_neu > maxtiefe) tiefe_neu = maxtiefe;
+    if (tiefe_neu > gesamttiefe) tiefe_neu = gesamttiefe;
     lcd.setCursor(30,0); lcdspace(tiefe_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 4;
   }
 
   if (menu == 7) {
-    if (tiefe_neu < mintiefe) tiefe_neu = mintiefe;
     hoehe_mm = hoehe_neu;
     tiefe_mm = tiefe_neu;
     state = 1;
