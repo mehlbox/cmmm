@@ -204,13 +204,16 @@ void FUNC_bereich(void)
 
 void FUNC_MinMax(void)
 { 
-  static long minhoehe_neu, maxhoehe_neu;
+  static long minhoehe_neu, maxhoehe_neu, mintiefe_neu, maxtiefe_neu;
   if(!LCDML.FuncInit()) {
     cursorOn = true;
     menu = 0;
     minhoehe_neu = minhoehe;
     maxhoehe_neu = maxhoehe;
+    mintiefe_neu = mintiefe;
+    maxtiefe_neu = maxtiefe;
   }
+  
   if (menu == 0) {
     lcd.clear();
     lcd.setCursor(0,0); lcd.print(F("\176Grenzwerte:"));
@@ -246,7 +249,7 @@ void FUNC_MinMax(void)
     if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  maxhoehe_neu --; menu = 5; } 
     if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); maxhoehe_neu = maxhoehe_neu/10; menu = 5; }
     if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  maxhoehe_neu = maxhoehe_neu*10; menu = 5; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 15; }
+    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 6; }
   }
 
   if (menu == 5) {
@@ -256,10 +259,58 @@ void FUNC_MinMax(void)
     lcd.setCursor(36,0);
     menu = 4;
   }
-    
+
+  if (menu == 6) {
+    lcd.clear();
+    lcd.setCursor(0,0); lcd.print(F("\176Grenzwerte:"));
+    lcd.setCursor(0,1); lcd.print(F("Min-tiefe:"));
+    lcd.setCursor(20,0);lcd.print(F("Max-tiefe:"));
+    lcd.setCursor(10,1); lcdspace(mintiefe_neu);
+    lcd.setCursor(30,0); lcdspace(maxtiefe_neu);
+    menu = 8;
+  }
+
+  if (menu == 7) {
+    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    mintiefe_neu ++; menu = 8; }
+    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  mintiefe_neu --; menu = 8; }
+    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); mintiefe_neu = mintiefe_neu / 10; menu = 8; }
+    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  mintiefe_neu = mintiefe_neu * 10; menu = 8; }
+    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 9; }
+  }
+
+  if (menu == 8) {
+      if (mintiefe_neu < 0) mintiefe_neu = 0;
+      lcd.setCursor(10,1); lcdspace(mintiefe_neu); lcd.print((char)0x7F);
+      lcd.setCursor(16,1);
+      menu = 7;
+  }
+
+  if (menu == 9) {
+    lcd.setCursor(10,1); lcdspace(mintiefe_neu); lcd.print(F(" "));
+    menu = 11;
+  }
+
+  if (menu == 10) {
+    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    maxtiefe_neu ++; menu = 11; }
+    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  maxtiefe_neu --; menu = 11; } 
+    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); maxtiefe_neu = maxtiefe_neu/10; menu = 11; }
+    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  maxtiefe_neu = maxtiefe_neu*10; menu = 11; }
+    if (LCDMenuLib_checkButtonEnter()) { menu = 15; }
+  }
+
+  if (menu == 11) {
+    if (maxtiefe_neu < 0) maxtiefe_neu = 0;
+    if (maxtiefe_neu < mintiefe_neu) maxtiefe_neu = mintiefe_neu;
+    lcd.setCursor(30,0); lcdspace(maxtiefe_neu); lcd.print((char)0x7F);
+    lcd.setCursor(36,0);
+    menu = 10;
+  }
+   
   if (menu == 15) {
-    save(104, maxhoehe_neu); // maxhoehe
-    save(105, minhoehe_neu); // minhoehe
+    save(104, maxhoehe_neu);
+    save(105, minhoehe_neu);
+    save(106, maxtiefe_neu);
+    save(107, mintiefe_neu);
     state = 0; // reinitialisieren
     menu = 99;
     animation();

@@ -73,7 +73,7 @@ LCDMenuLib_add(14, root_8       , 7  , "Speicher auslesen" , FUNC_speicherLesen)
 LCDMenuLib_createMenu(_LCDMenuLib_cnt);
 
 float SPULEv, SPULEh;   // durchmesser Spule in mm
-unsigned long gesamtbreite, gesamttiefe, gesamthoehe, maxhoehe, minhoehe; // Geometrie Grenzen in mm
+unsigned long gesamtbreite, gesamttiefe, gesamthoehe, maxhoehe, minhoehe, maxtiefe, mintiefe; // Geometrie Grenzen in mm
 
 unsigned long motorSpeed;
 unsigned long currfrontline_steps, currfrontline_mm, currbackline_steps, currbackline_mm; // Schritte
@@ -149,6 +149,8 @@ void loop() {
     gesamthoehe  = load(103);
     maxhoehe = load(104);
     minhoehe = load(105);
+    maxtiefe  = load(106);
+    mintiefe  = load(107);
 
     slot = load(120);
     motorSpeed = load(108);
