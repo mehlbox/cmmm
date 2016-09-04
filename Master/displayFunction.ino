@@ -1,3 +1,34 @@
+void FUNC_aktuellPos(void) { 
+  if(!LCDML.FuncInit()) {
+    menu = 0;
+    cursorOn = false;
+  } 
+  if (menu == 0) {
+    lcd.clear();
+    lcd.setCursor(0,0); lcd.print(F("\176Position in mm:"));
+    lcd.setCursor(0,1); lcd.print(F("H\357he:"));
+    lcd.setCursor(20,0);lcd.print(F("Raumtiefe:"));
+    lcd.setCursor(10,1); lcdspace(hoehe_mm);
+    lcd.setCursor(30,0); lcdspace(tiefe_mm);
+    menu = 1;
+  }
+
+  if (menu == 1) {
+    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 7; }
+  }
+
+  if (menu == 7) {
+    state = 1;
+    menu = 99;
+    animation();
+  }
+
+  if (menu == 99) {
+    cursorOn = false;
+    LCDML.FuncEnd(1, 0, 0, 0, 0, 0);  // (direct, enter, up, down, left, right)
+  }
+}
+
 void FUNC_laden(void) {
   static int select_slot;
   static float temp_hoehe, temp_tiefe;
@@ -128,38 +159,6 @@ void FUNC_einstellen(void)
   }
 }
 
-void FUNC_aktuellPos(void)
-{ 
-  if(!LCDML.FuncInit()) {
-    menu = 0;
-    cursorOn = false;
-  } 
-  if (menu == 0) {
-    lcd.clear();
-    lcd.setCursor(0,0); lcd.print(F("\176Position in mm:"));
-    lcd.setCursor(0,1); lcd.print(F("H\357he:"));
-    lcd.setCursor(20,0);lcd.print(F("Raumtiefe:"));
-    lcd.setCursor(10,1); lcdspace(hoehe_mm);
-    lcd.setCursor(30,0); lcdspace(tiefe_mm);
-    menu = 1;
-  }
-
-  if (menu == 1) {
-    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 7; }
-  }
-
-  if (menu == 7) {
-    state = 1;
-    menu = 99;
-    animation();
-  }
-
-  if (menu == 99) {
-    cursorOn = false;
-    LCDML.FuncEnd(1, 0, 0, 0, 0, 0);  // (direct, enter, up, down, left, right)
-  }
-}
-
 void FUNC_speichern(void) {
   static int select_slot;
   if(!LCDML.FuncInit()) {
@@ -206,34 +205,6 @@ void FUNC_speichern(void) {
     cursorOn = false;
     LCDML.FuncEnd(1, 0, 0, 0, 0, 0);  // (direct, enter, up, down, left, right)
   }
-}
-
-void FUNC_status()
-{
-static unsigned long timer;
-  if(!LCDML.FuncInit())
-  {
-    cursorOn = false;
-    lcd.clear();
-    lcd.setCursor(0,0); lcd.print(F("Status: ")); lcd.print(state);
-    lcd.setCursor(2,1); lcd.print(F("Slot: "));   lcd.print(slot);
-    lcd.setCursor(20,0); lcd.print(F("L: "));
-    lcd.setCursor(20,1); lcd.print(F("R: "));
-  }
-    if (millis() - timer >= 500) { // I2C BUS NICHT ZUMÜLLEN
-    timer = millis();
-      for (int n=1; n<=4; n++) {
-        if (n == 1) lcd.setCursor(16,0);
-        if (n == 2) lcd.setCursor(36,1);
-        if (n == 3) lcd.setCursor(19,0);
-        if (n == 4) lcd.setCursor(39,1);
-        lcd.print(motorstatus(n));
-      }
-    lcd.setCursor(23,0); lcd.print(spannung(1),1); lcd.print(F(" Volt"));
-    lcd.setCursor(23,1); lcd.print(spannung(3),1); lcd.print(F(" Volt"));      
-    }
-  LCDMenuLib_checkButtonEnter();
-  LCDML.FuncEnd(0, 1, 0, 0, 0, 0); // (direct, enter, up, down, left, right)     
 }
 
 void FUNC_zeigenSchnur(void)
@@ -288,10 +259,31 @@ void FUNC_zeigenSchnur(void)
   }
 }
 
-void FUNC_back(void){
-  LCDML.FuncInit();            // setup function 
-  LCDML.Button_quit(2);        // quit button   
-  LCDML.FuncEnd(1,0,0,0,0,0);  // direct func end
+void FUNC_status() {
+static unsigned long timer;
+  if(!LCDML.FuncInit())
+  {
+    cursorOn = false;
+    lcd.clear();
+    lcd.setCursor(0,0); lcd.print(F("Status: ")); lcd.print(state);
+    lcd.setCursor(2,1); lcd.print(F("Slot: "));   lcd.print(slot);
+    lcd.setCursor(20,0); lcd.print(F("L: "));
+    lcd.setCursor(20,1); lcd.print(F("R: "));
+  }
+    if (millis() - timer >= 500) { // I2C BUS NICHT ZUMÜLLEN
+    timer = millis();
+      for (int n=1; n<=4; n++) {
+        if (n == 1) lcd.setCursor(16,0);
+        if (n == 2) lcd.setCursor(36,1);
+        if (n == 3) lcd.setCursor(19,0);
+        if (n == 4) lcd.setCursor(39,1);
+        lcd.print(motorstatus(n));
+      }
+    lcd.setCursor(23,0); lcd.print(spannung(1),1); lcd.print(F(" Volt"));
+    lcd.setCursor(23,1); lcd.print(spannung(3),1); lcd.print(F(" Volt"));      
+    }
+  LCDMenuLib_checkButtonEnter();
+  LCDML.FuncEnd(0, 1, 0, 0, 0, 0); // (direct, enter, up, down, left, right)     
 }
 
 void FUNC_motorStop(void){
@@ -300,4 +292,9 @@ void FUNC_motorStop(void){
       Wire.endTransmission();
 }
 
+void FUNC_back(void){
+  LCDML.FuncInit();            // setup function 
+  LCDML.Button_quit(2);        // quit button   
+  LCDML.FuncEnd(1,0,0,0,0,0);  // direct func end
+}
 
