@@ -30,10 +30,6 @@
 #define _LCDMenuLib_cfg_lcd_standard	 0        /* 0=HD44780 standard / 1=HD44780U standard */
 #define _LCDMenuLib_cfg_press_time       50     /* button press time in ms */
 
-// Menue
-#define _LCDMenuLib_cnt    14  // last element id
-
-
 // Keypad
   unsigned long buttontimer;
   uint16_t value;  // analogpin for keypad
@@ -51,7 +47,8 @@
   #define _BUTTON_analog_right_max     674 
 
 
-
+// Menue
+#define _LCDMenuLib_cnt    15  // last element id
 /* init lcdmenulib */
 LCDMenuLib_init(_LCDMenuLib_cnt);
 /* LCDMenuLib_element(id, prev_layer_element, new_element_num, lang_string, callback_function) */
@@ -59,17 +56,18 @@ LCDMenuLib_add(0 , root         , 1  , "Aktuelle Position"  , FUNC_aktuellPos);
 LCDMenuLib_add(1 , root         , 2  , "Position laden"     , FUNC_laden);
 LCDMenuLib_add(2 , root         , 3  , "Pos. einstellen"    , FUNC_einstellen);
 LCDMenuLib_add(3 , root         , 4  , "Pos. speichern"     , FUNC_speichern);
-LCDMenuLib_add(4 , root         , 5  , "Zeige Schnurl\341nge", FUNC_zeigenSchnur);
+LCDMenuLib_add(4 , root         , 5  , "Zeige Schnurl\341nge",FUNC_zeigenSchnur);
 LCDMenuLib_add(5 , root         , 6  , "Status"             , FUNC_status);
 LCDMenuLib_add(6 , root         , 7  , "Motor Stop !!"      , FUNC_motorStop);
 LCDMenuLib_add(7 , root         , 8  , "Admin Funktionen"   , FUNC_Admin);
-LCDMenuLib_add(8 , root_8       , 1  , "Abweichung Schnur" , FUNC_abweichnung);
-LCDMenuLib_add(9 , root_8       , 2  , "Drehrichtung"      , FUNC_drehrichtung);
-LCDMenuLib_add(10, root_8       , 3  , "Aktionsbereich"    , FUNC_bereich);
-LCDMenuLib_add(11, root_8       , 4  , "MinMax H\357he"    , FUNC_MinMax);
-LCDMenuLib_add(12, root_8       , 5  , "Spulen"            , FUNC_Spule);
-LCDMenuLib_add(13, root_8       , 6  , "Motoren"           , FUNC_motoren);
-LCDMenuLib_add(14, root_8       , 7  , "Speicher auslesen" , FUNC_speicherLesen);
+LCDMenuLib_add(8 , root_8       , 1  , "Abweichung Schnur" ,  FUNC_abweichnung);
+LCDMenuLib_add(9 , root_8       , 2  , "Zeige Schnurl\341nge",FUNC_zeigenSchnur);
+LCDMenuLib_add(10, root_8       , 3  , "Drehrichtung"      , FUNC_drehrichtung);
+LCDMenuLib_add(11, root_8       , 4  , "Aktionsbereich"    , FUNC_bereich);
+LCDMenuLib_add(12, root_8       , 5  , "MinMax H\357he"    , FUNC_MinMax);
+LCDMenuLib_add(13, root_8       , 6  , "Spulen"            , FUNC_Spule);
+LCDMenuLib_add(14, root_8       , 7  , "Motoren"           , FUNC_motoren);
+LCDMenuLib_add(15, root_8       , 8  , "Speicher auslesen" , FUNC_speicherLesen);
 LCDMenuLib_createMenu(_LCDMenuLib_cnt);
 
 float SPULEv, SPULEh;   // durchmesser Spule in mm
