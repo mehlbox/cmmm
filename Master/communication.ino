@@ -117,3 +117,43 @@ void sendLong(long senddata, byte motor, byte action) { // Long Wert senden
     Wire.write(data,6);
     Wire.endTransmission();
 }
+
+void checkError() { //selbstdiagnose
+  byte fehler;
+  int stat1, stat3, span1, span3;
+  static unsigned long errorMillis;
+  if (demo == false) { //keine Fehler im Demo prüfen.
+    stat1 = motorstatus(1);
+    stat3 = motorstatus(3);
+    span1 = spannung(1);
+    span3 = spannung(3);
+    if (stat1 == '#' || stat3 == '#' || span1 < 8 || span3 < 8) { // Angabe Spannung in Volt
+      fehler = true;
+      lcd.noCursor();
+      lcd.clear();
+      lcd.setCursor(0,0); lcd.print(F("Fehler!!!"));
+      lcd.setCursor(8,1); lcd.print(F("Links Rechts"));
+      digitalWrite(10, HIGH);
+      while(fehler) {
+        if (stat1 != '#' && stat3 != '#' && span1 >= 9 && span3 >= 9) { fehler = false; FUNC_back(); } // Fehler behoben
+        if (millis() >= errorMillis && fehler == true) {
+          Wire.beginTransmission(0); Wire.write(0); Wire.endTransmission(); // alle noch erreichbaren Motoren anhalten
+          errorMillis = millis() + 100;
+          stat1 = motorstatus(1);
+          stat3 = motorstatus(3);
+          span1 = spannung(1);
+          span3 = spannung(3);
+          lcd.setCursor(20,0); lcd.print(F("Verbi.: "));
+            if (stat1 == '#') { lcd.print(F("Ni OK ")); } else {lcd.print(F(" OK   ")); }
+            if (stat3 == '#') { lcd.print(F("Ni OK ")); } else {lcd.print(F(" OK   ")); }
+          lcd.setCursor(20,1); lcd.print(F("Spann.: "));
+            if (span1  <  9 ) { lcd.print(F("Ni OK " )); } else {lcd.print(F(" OK   " )); }
+            if (span3  <  9 ) { lcd.print(F("Ni OK " )); } else {lcd.print(F(" OK   " )); }
+        }
+      }
+    }
+  } else {
+    Wire.beginTransmission(0); Wire.write(0); Wire.endTransmission(); // Motoren im Demo Modus permanent Stop Signal schicken.
+    if (millis() > 60000) demo = false; // Demo Modus nach einer Minuten verlassen.
+  }
+}
