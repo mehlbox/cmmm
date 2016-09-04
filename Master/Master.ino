@@ -11,11 +11,11 @@
 #include <LCDMenuLib.h>
 #include <EEPROM.h>
 
-/* settings for lcd */
+/* display dimension */
 #define _LCDMenuLib_LCD_cols             20
 #define _LCDMenuLib_LCD_rows             4
 
-/* pin settings */  
+/* pin settings for lcd*/  
 #define _LCDMenuLib_LCD_rs               2
 #define _LCDMenuLib_LCD_e                3
 #define _LCDMenuLib_LCD_dat0             6
