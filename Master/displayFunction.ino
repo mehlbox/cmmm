@@ -240,13 +240,13 @@ void FUNC_zeigenSchnur(void)
     if (millis() - timer > 500) { // I2C BUS NICHT ZUMÜLLEN
       timer = millis();
       getCurrent(addr);
-      if (!unit) {
+      if (unit) {
         lcd.setCursor(0,0); lcd.print(F("\176Schritte ")); if (addr == 11) {lcd.print(F("links     "));} else {lcd.print(F("rechts    "));}
         lcd.setCursor(0,1); lcd.print(F(" "));
         lcd.setCursor(22,0); lcdspace(targetfrontline_steps); lcd.print(F(" ")); lcdspace(currfrontline_steps);
         lcd.setCursor(22,1); lcdspace(targetbackline_steps) ; lcd.print(F(" ")); lcdspace(currbackline_steps) ;
       }      
-      if (unit) {
+      if (!unit) {
         lcd.setCursor(0,0); lcd.print(F("\176L\341nge Schnur in mm:"));
         lcd.setCursor(0,1); if (addr == 11) {lcd.print(F("L"));} else {lcd.print(F("R"));}
         lcd.setCursor(22,0); lcdspace(targetfrontline_mm); lcd.print(F(" ")); lcdspace(currfrontline_mm); lcd.print(F("  "));
