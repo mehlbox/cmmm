@@ -26,10 +26,11 @@
 /* lib config */
 #define _LCDMenuLib_cfg_initscreen       0      /* 0=disable, 1=enable */
 #define _LCDMenuLib_cfg_initscreen_time  5000   /* 0=time disabled, >0 wait time in ms */
-#define _LCDMenuLib_cfg_scrollbar	 1      	    /* 0=no scrollbar, 1=complex scrollbar, 2=easy scrollbar */
-#define _LCDMenuLib_cfg_lcd_standard	 0        /* 0=HD44780 standard / 1=HD44780U standard */
+#define _LCDMenuLib_cfg_scrollbar	       1      /* 0=no scrollbar, 1=complex scrollbar, 2=easy scrollbar */
+#define _LCDMenuLib_cfg_lcd_standard	   0      /* 0=HD44780 standard / 1=HD44780U standard */
 #define _LCDMenuLib_cfg_press_time       50     /* button press time in ms */
 
+#define _lockPin  A2
 // Keypad
   unsigned long buttontimer;
   uint16_t value;  // analogpin for keypad
@@ -88,7 +89,7 @@ byte cursorOn = false;
 byte busAction;
 byte gang;
 byte ratio;
-byte hardwareLock;
+byte lastLockState;
 byte demo;
 
 byte state = 0;
@@ -101,8 +102,8 @@ byte state = 0;
 
 void setup()
 { 
-  pinMode(A2, INPUT); digitalWrite(A2, HIGH); // für die Abfrage ob Mischpult aus
-  while(!digitalRead(A2)); // nicht aufwachen wenn Mischpult aus
+  pinMode(_lockPin, INPUT); digitalWrite(_lockPin, HIGH); // für die Abfrage ob Mischpult aus
+  while(!digitalRead(_lockPin)); // nicht aufwachen wenn Mischpult aus
   LCDMenuLib_setup(_LCDMenuLib_cnt);  /* Setup for LcdMenuLib */
   Wire.begin(); // start up i2c bus
   TWBR = 158; TWSR |= bit(TWPS0); // slow down bus clock
@@ -212,10 +213,10 @@ void loop() {
     if(fadeValue == 0) lcd.clear(); // Licht ist komplett aus. Display löschen.
   }
   
-  if(!digitalRead(A2) && hardwareLock == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
+  if(!digitalRead(_lockPin) && lastLockState == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
     long temp_hoehe, temp_tiefe;
     checkError();
-    hardwareLock = 0;
+    lastLockState = 0;
     // Tiefe nicht ändern
     temp_hoehe = load(100);
     if (temp_hoehe == -1) temp_hoehe = 3000;
@@ -227,13 +228,13 @@ void loop() {
   }
   
   if(state == 4 && fadeValue == 0) {
-    while(!digitalRead(A2)); // nicht wieder aufwachen wenn Mischpult aus
+    while(!digitalRead(_lockPin)); // nicht wieder aufwachen wenn Mischpult aus
     checkError();
   }
   
-  if(digitalRead(A2) && hardwareLock == 0) { // Mischpult eingeschaltet.. letzte Position laden
+  if(digitalRead(_lockPin) && lastLockState == 0) { // Mischpult eingeschaltet.. letzte Position laden
     checkError();
-    hardwareLock = 1;
+    lastLockState = 1;
     state = 0;
     FUNC_back(); // Menü neu aufbauen.
     fadeState = true;
