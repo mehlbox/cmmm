@@ -90,7 +90,7 @@ byte cursorOn = false;
 byte busAction;
 byte gang;
 byte ratio;
-byte pultState;
+byte hardwareLock;
 byte demo;
 
 byte state = 0;
@@ -205,10 +205,10 @@ void loop() {
     if(fadeValue == 0) lcd.clear(); // Licht ist komplett aus. Display löschen.
   }
   
-  if(!digitalRead(A2) && pultState == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
+  if(!digitalRead(A2) && hardwareLock == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
     long temp_hoehe, temp_tiefe;
     checkError();
-    pultState = 0;
+    hardwareLock = 0;
     // Tiefe nicht ändern
     temp_hoehe = load(100);
     if (temp_hoehe == -1) temp_hoehe = 3000;
@@ -224,10 +224,10 @@ void loop() {
     checkError();
   }
   
-  if(digitalRead(A2) && pultState == 0) { // Mischpult eingeschaltet.. letzten Slot laden
+  if(digitalRead(A2) && hardwareLock == 0) { // Mischpult eingeschaltet.. letzten Slot laden
     long temp_hoehe, temp_tiefe;
     checkError();
-    pultState = 1;
+    hardwareLock = 1;
     slot = load(107);
     temp_hoehe = load(slot);
     temp_tiefe = load(slot+128);
