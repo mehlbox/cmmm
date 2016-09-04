@@ -11,11 +11,11 @@
 #include <LCDMenuLib.h>
 #include <EEPROM.h>
 
-/* lcd dimension*/
+/* settings for lcd */
 #define _LCDMenuLib_LCD_cols             20
 #define _LCDMenuLib_LCD_rows             4
 
-/* pin settings for lcd*/  
+/* pin settings */  
 #define _LCDMenuLib_LCD_rs               2
 #define _LCDMenuLib_LCD_e                3
 #define _LCDMenuLib_LCD_dat0             6
@@ -103,7 +103,7 @@ byte state = 0;
 
 void setup()
 { 
-  pinMode(A2, INPUT); digitalWrite(A2, HIGH); // Spannung für die Abfrage ob Mischpult aus
+  pinMode(A2, INPUT); digitalWrite(A2, HIGH); // für die Abfrage ob Mischpult aus
   while(!digitalRead(A2)); // nicht aufwachen wenn Mischpult aus
   LCDMenuLib_setup(_LCDMenuLib_cnt);  /* Setup for LcdMenuLib */
   Wire.begin(); // start up i2c bus
