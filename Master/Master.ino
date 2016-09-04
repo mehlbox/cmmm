@@ -31,6 +31,7 @@
 #define _LCDMenuLib_cfg_press_time       50     /* button press time in ms */
 
 #define _lockPin  A2
+#define _lightPin 10
 // Keypad
   unsigned long buttontimer;
   uint16_t value;  // analogpin for keypad
@@ -110,7 +111,7 @@ void setup()
   LCDMenuLib_IS_startDirect();
   adminTimer = 300000; // vorsprung für Timer damit keine Admin Rechte
   pinMode(10, OUTPUT);// LCD Beleuchtung
-  digitalWrite(10, HIGH); // Beleuchtung ein
+  digitalWrite(_lightPin, HIGH); // Beleuchtung ein
   if (load(120) == -1 ) newHardware(); //EEPROM ist leer ... Standartwerte laden
   if(analogRead(A3) < 10) { // Demo Modus ohne überlagerte Fehlermeldung
     lcd.clear();

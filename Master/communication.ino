@@ -133,7 +133,7 @@ void checkError() { //selbstdiagnose
       lcd.clear();
       lcd.setCursor(0,0); lcd.print(F("Fehler!!!"));
       lcd.setCursor(8,1); lcd.print(F("Links Rechts"));
-      digitalWrite(10, HIGH);
+      digitalWrite(_lightPin, HIGH);
       while(fehler) {
         if (stat1 != '#' && stat3 != '#' && span1 >= 9 && span3 >= 9) { fehler = false; FUNC_back(); } // Fehler behoben
         if (millis() >= errorMillis && fehler == true) {
