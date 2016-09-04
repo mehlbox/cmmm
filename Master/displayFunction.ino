@@ -73,7 +73,7 @@ void FUNC_laden(void) {
 
   if (menu == 7) {
     slot = select_slot;
-    save(107,slot);
+    save(120,slot);
     hoehe_mm = temp_hoehe;
     tiefe_mm = temp_tiefe;
     state = 1;
@@ -194,7 +194,7 @@ void FUNC_speichern(void) {
 
   if (menu == 7) {
     slot = select_slot;
-    save(107, slot);
+    save(120, slot);
     save(slot    , hoehe_mm);
     save(slot+128, tiefe_mm);
     menu = 99;

@@ -112,7 +112,7 @@ void setup()
   adminTimer = 300000; // vorsprung für Timer damit keine Admin Rechte
   pinMode(10, OUTPUT);// LCD Beleuchtung
   digitalWrite(10, HIGH); // Beleuchtung ein
-  if (load(106) == -1 ) newHardware(); //EEPROM ist leer ... Standartwerte laden
+  if (load(120) == -1 ) newHardware(); //EEPROM ist leer ... Standartwerte laden
   if(analogRead(A3) < 10) { // Demo Modus ohne überlagerte Fehlermeldung
     lcd.clear();
     lcd.setCursor( 5, 1);
@@ -150,7 +150,7 @@ void loop() {
     maxhoehe = load(104);
     minhoehe = load(105);
 
-    slot = load(107);
+    slot = load(120);
     motorSpeed = load(108);
     SPULEv = load(109) * 0.001;
     SPULEh = load(110) * 0.001;
@@ -228,7 +228,7 @@ void loop() {
     long temp_hoehe, temp_tiefe;
     checkError();
     hardwareLock = 1;
-    slot = load(107);
+    slot = load(120);
     temp_hoehe = load(slot);
     temp_tiefe = load(slot+128);
     if (temp_hoehe == -1) temp_hoehe = 2200;

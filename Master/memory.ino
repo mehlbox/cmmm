@@ -18,11 +18,12 @@ void newHardware() {
   save(103, 5800); // gesamthoehe
   save(104, 3500); // maxhoehe
   save(105, 1000); // minhoehe
-  save(106,29500); // Spulendurchmesser-alt / trotzdem noch newHardware Erkennung
-  save(107,   1);  // Aktuelle gewählter Slot
-  save(108, 800);  // Geschwindigkeit
+  save(106, 6000); // maxraumtiefe
+  save(107, 2000); // minraumtiefe
+  save(108,  800);  // Geschwindigkeit 
   save(109, 29500);// Spulendurchmesser vorne
   save(110,150000);// Spulendurchmesser hinten
+  save(120,     1);// Aktuelle gewählter Slot / newHardware() wird ausgeführt wenn leer
   EEPROM.write(1022,27); // Ratio. Teil von Slot 255  Planetgetriebe auf Motor montiert...
   EEPROM.write(1023, 1); // Gang.  Teil von Slot 255  Gang 1,2,4 volle, halbe, viertel Schritte. Leiser aber auch schwächer...
 }
