@@ -49,7 +49,7 @@ void FUNC_abweichnung(void)
   if (menu == 5) {
     if (selected_steps < -10000) selected_steps=-10000;
     if (selected_steps >  10000) selected_steps= 10000;
-    lcd.setCursor(28,0); lcdspace(selected_steps); lcd.print((char)0x7F);
+    lcd.setCursor(28,0); lcdPrintNR(selected_steps); lcd.print((char)0x7F);
     lcd.setCursor(34,0);
     menu = 4;
   }
@@ -126,9 +126,9 @@ void FUNC_bereich(void)
     lcd.setCursor(0,1); lcd.print(F("H\357he:"));
     lcd.setCursor(20,0);lcd.print(F("Tiefe:"));
     lcd.setCursor(20,1);lcd.print(F("Breite:"));
-    lcd.setCursor(10,1); lcdspace(gesamthoehe_neu);
-    lcd.setCursor(30,0); lcdspace(gesamttiefe_neu);
-    lcd.setCursor(30,1); lcdspace(gesamtbreite_neu);
+    lcd.setCursor(10,1); lcdPrintNR(gesamthoehe_neu);
+    lcd.setCursor(30,0); lcdPrintNR(gesamttiefe_neu);
+    lcd.setCursor(30,1); lcdPrintNR(gesamtbreite_neu);
     menu = 2;
   }
 
@@ -142,13 +142,13 @@ void FUNC_bereich(void)
 
   if (menu == 2) {
       if (gesamthoehe_neu < 0) gesamthoehe_neu = 0;
-      lcd.setCursor(10,1); lcdspace(gesamthoehe_neu); lcd.print((char)0x7F);
+      lcd.setCursor(10,1); lcdPrintNR(gesamthoehe_neu); lcd.print((char)0x7F);
       lcd.setCursor(16,1);
       menu = 1;
   }
 
   if (menu == 3) {
-    lcd.setCursor(10,1); lcdspace(gesamthoehe_neu); lcd.print(F(" "));
+    lcd.setCursor(10,1); lcdPrintNR(gesamthoehe_neu); lcd.print(F(" "));
     menu = 5;
   }
 
@@ -162,13 +162,13 @@ void FUNC_bereich(void)
 
   if (menu == 5) {
     if (gesamttiefe_neu < 0) gesamttiefe_neu = 0;
-    lcd.setCursor(30,0); lcdspace(gesamttiefe_neu); lcd.print((char)0x7F);
+    lcd.setCursor(30,0); lcdPrintNR(gesamttiefe_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 4;
   }
   
   if (menu == 6) {
-    lcd.setCursor(30,0); lcdspace(gesamttiefe_neu); lcd.print(F(" "));
+    lcd.setCursor(30,0); lcdPrintNR(gesamttiefe_neu); lcd.print(F(" "));
     menu = 8;
   }
   
@@ -182,7 +182,7 @@ void FUNC_bereich(void)
 
   if (menu == 8) {
     if (gesamtbreite_neu < 0) gesamtbreite_neu = 0;
-    lcd.setCursor(30,1); lcdspace(gesamtbreite_neu); lcd.print((char)0x7F);
+    lcd.setCursor(30,1); lcdPrintNR(gesamtbreite_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,1);
     menu = 7;
   }
@@ -219,8 +219,8 @@ void FUNC_MinMax(void)
     lcd.setCursor(0,0); lcd.print(F("\176Grenzwerte:"));
     lcd.setCursor(0,1); lcd.print(F("Min-h\357he:"));
     lcd.setCursor(20,0);lcd.print(F("Max-h\357he:"));
-    lcd.setCursor(10,1); lcdspace(minhoehe_neu);
-    lcd.setCursor(30,0); lcdspace(maxhoehe_neu);
+    lcd.setCursor(10,1); lcdPrintNR(minhoehe_neu);
+    lcd.setCursor(30,0); lcdPrintNR(maxhoehe_neu);
     menu = 2;
   }
 
@@ -234,13 +234,13 @@ void FUNC_MinMax(void)
 
   if (menu == 2) {
       if (minhoehe_neu < 0) minhoehe_neu = 0;
-      lcd.setCursor(10,1); lcdspace(minhoehe_neu); lcd.print((char)0x7F);
+      lcd.setCursor(10,1); lcdPrintNR(minhoehe_neu); lcd.print((char)0x7F);
       lcd.setCursor(16,1);
       menu = 1;
   }
 
   if (menu == 3) {
-    lcd.setCursor(10,1); lcdspace(minhoehe_neu); lcd.print(F(" "));
+    lcd.setCursor(10,1); lcdPrintNR(minhoehe_neu); lcd.print(F(" "));
     menu = 5;
   }
 
@@ -256,7 +256,7 @@ void FUNC_MinMax(void)
     if (maxhoehe_neu < 0) maxhoehe_neu = 0;
     if (maxhoehe_neu < minhoehe_neu) maxhoehe_neu = minhoehe_neu;
     if (maxhoehe_neu > gesamthoehe) maxhoehe_neu = gesamthoehe;
-    lcd.setCursor(30,0); lcdspace(maxhoehe_neu); lcd.print((char)0x7F);
+    lcd.setCursor(30,0); lcdPrintNR(maxhoehe_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 4;
   }
@@ -266,8 +266,8 @@ void FUNC_MinMax(void)
     lcd.setCursor(0,0); lcd.print(F("\176Grenzwerte:"));
     lcd.setCursor(0,1); lcd.print(F("Min-tiefe:"));
     lcd.setCursor(20,0);lcd.print(F("Max-tiefe:"));
-    lcd.setCursor(10,1); lcdspace(mintiefe_neu);
-    lcd.setCursor(30,0); lcdspace(maxtiefe_neu);
+    lcd.setCursor(10,1); lcdPrintNR(mintiefe_neu);
+    lcd.setCursor(30,0); lcdPrintNR(maxtiefe_neu);
     menu = 8;
   }
 
@@ -281,13 +281,13 @@ void FUNC_MinMax(void)
 
   if (menu == 8) {
       if (mintiefe_neu < 0) mintiefe_neu = 0;
-      lcd.setCursor(10,1); lcdspace(mintiefe_neu); lcd.print((char)0x7F);
+      lcd.setCursor(10,1); lcdPrintNR(mintiefe_neu); lcd.print((char)0x7F);
       lcd.setCursor(16,1);
       menu = 7;
   }
 
   if (menu == 9) {
-    lcd.setCursor(10,1); lcdspace(mintiefe_neu); lcd.print(F(" "));
+    lcd.setCursor(10,1); lcdPrintNR(mintiefe_neu); lcd.print(F(" "));
     menu = 11;
   }
 
@@ -303,7 +303,7 @@ void FUNC_MinMax(void)
     if (maxtiefe_neu < 0) maxtiefe_neu = 0;
     if (maxtiefe_neu < mintiefe_neu) maxtiefe_neu = mintiefe_neu;
     if (maxtiefe_neu > gesamttiefe) maxtiefe_neu = gesamttiefe;
-    lcd.setCursor(30,0); lcdspace(maxtiefe_neu); lcd.print((char)0x7F);
+    lcd.setCursor(30,0); lcdPrintNR(maxtiefe_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 10;
   }
@@ -371,7 +371,7 @@ void FUNC_Spule(void)
 
   if (menu == 5) {
       if (SPULE_neu < 0) SPULE_neu = 0;
-      lcd.setCursor(27,0); lcdspace(SPULE_neu); 
+      lcd.setCursor(27,0); lcdPrintNR(SPULE_neu); 
       lcd.print((char)0x7F); lcd.print(F(" "));
       lcd.setCursor(31,0);
       menu = 4;
@@ -409,9 +409,9 @@ void FUNC_motoren(void)
     lcd.setCursor( 0,1); lcd.print(F("Geschwind:"));
     lcd.setCursor(20,0); lcd.print(F("Gang:"));
     lcd.setCursor(20,1); lcd.print(F("Ratio:"));
-    lcd.setCursor(10,1); lcdspace(motorSpeed_neu);
-    lcd.setCursor(30,0); lcdspace(expo(2,gear_neu));
-    lcd.setCursor(30,1); lcdspace(ratio_neu);
+    lcd.setCursor(10,1); lcdPrintNR(motorSpeed_neu);
+    lcd.setCursor(30,0); lcdPrintNR(expo(2,gear_neu));
+    lcd.setCursor(30,1); lcdPrintNR(ratio_neu);
     menu = 2;
   }
 
@@ -426,13 +426,13 @@ void FUNC_motoren(void)
   if (menu == 2) {
       if (motorSpeed_neu <    0) motorSpeed_neu = 0;
       if (motorSpeed_neu > 1400) motorSpeed_neu = 1400;
-      lcd.setCursor(10,1); lcdspace(motorSpeed_neu); lcd.print((char)0x7F);
+      lcd.setCursor(10,1); lcdPrintNR(motorSpeed_neu); lcd.print((char)0x7F);
       lcd.setCursor(16,1);
       menu = 1;
   }
 
   if (menu == 3) {
-    lcd.setCursor(10,1); lcdspace(motorSpeed_neu); lcd.print(" ");
+    lcd.setCursor(10,1); lcdPrintNR(motorSpeed_neu); lcd.print(" ");
     menu = 5;
   }
 
@@ -445,13 +445,13 @@ void FUNC_motoren(void)
   if (menu == 5) {
     if (gear_neu == 255) gear_neu = 0;
     if (gear_neu > 4)    gear_neu = 4;
-    lcd.setCursor(30,0); lcdspace(expo(2,gear_neu)); lcd.print((char)0x7F);
+    lcd.setCursor(30,0); lcdPrintNR(expo(2,gear_neu)); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 4;
   }
 
   if (menu == 6) {
-    lcd.setCursor(30,0); lcdspace(expo(2,gear_neu)); lcd.print(" ");
+    lcd.setCursor(30,0); lcdPrintNR(expo(2,gear_neu)); lcd.print(" ");
     menu = 8;
   }
 
@@ -467,7 +467,7 @@ void FUNC_motoren(void)
       if (ratio_neu <   1) ratio_neu = 1;
       if (ratio_neu > 200) ratio_neu = 1; // Überlauf in Variable
       if (ratio_neu > 100) ratio_neu = 100;
-      lcd.setCursor(30,1); lcdspace(ratio_neu); lcd.print((char)0x7F);
+      lcd.setCursor(30,1); lcdPrintNR(ratio_neu); lcd.print((char)0x7F);
       lcd.setCursor(36,1);
       menu = 7;
   }
@@ -513,10 +513,10 @@ void FUNC_speicherLesen(void) {
   if (menu == 2) {
       if (select_slot < 0)   select_slot= 0;
       if (select_slot > 127) select_slot= 127;
-      lcd.setCursor( 0,1); lcdspace(select_slot);
-      lcd.setCursor(20,0); lcdspace(select_slot+128);
-      lcd.setCursor(10,1); lcdspace(load(select_slot));
-      lcd.setCursor(30,0); lcdspace(load(select_slot+128));
+      lcd.setCursor( 0,1); lcdPrintNR(select_slot);
+      lcd.setCursor(20,0); lcdPrintNR(select_slot+128);
+      lcd.setCursor(10,1); lcdPrintNR(load(select_slot));
+      lcd.setCursor(30,0); lcdPrintNR(load(select_slot+128));
       menu = 1;
   }
 

@@ -8,8 +8,8 @@ void FUNC_aktuellPos(void) {
     lcd.setCursor(0,0); lcd.print(F("\176Position in mm:"));
     lcd.setCursor(0,1); lcd.print(F("H\357he:"));
     lcd.setCursor(20,0);lcd.print(F("Raumtiefe:"));
-    lcd.setCursor(10,1); lcdspace(hoehe_mm);
-    lcd.setCursor(30,0); lcdspace(tiefe_mm);
+    lcd.setCursor(10,1); lcdPrintNR(hoehe_mm);
+    lcd.setCursor(30,0); lcdPrintNR(tiefe_mm);
     menu = 1;
   }
 
@@ -65,9 +65,9 @@ void FUNC_laden(void) {
       if (temp_tiefe == -1) temp_tiefe = 0;
       if (temp_tiefe > maxtiefe) temp_tiefe = maxtiefe;
       if (temp_tiefe < mintiefe) temp_tiefe = mintiefe;
-      lcd.setCursor(10,0); lcdspace(select_slot);
-      lcd.setCursor(10,1); lcdspace(temp_hoehe);
-      lcd.setCursor(30,0); lcdspace(temp_tiefe);
+      lcd.setCursor(10,0); lcdPrintNR(select_slot);
+      lcd.setCursor(10,1); lcdPrintNR(temp_hoehe);
+      lcd.setCursor(30,0); lcdPrintNR(temp_tiefe);
       lcd.setCursor(16,0);
       menu = 1;
   }
@@ -103,8 +103,8 @@ void FUNC_einstellen(void)
     lcd.setCursor(0,0); lcd.print(F("\176einstellen in mm:"));
     lcd.setCursor(0,1); lcd.print(F("H\357he:"));
     lcd.setCursor(20,0);lcd.print(F("Raumtiefe:"));
-    lcd.setCursor(10,1); lcdspace(hoehe_neu);
-    lcd.setCursor(30,0); lcdspace(tiefe_neu);
+    lcd.setCursor(10,1); lcdPrintNR(hoehe_neu);
+    lcd.setCursor(30,0); lcdPrintNR(tiefe_neu);
     menu = 2;
   }
 
@@ -119,14 +119,14 @@ void FUNC_einstellen(void)
   if (menu == 2) {
       if (hoehe_neu < 0) hoehe_neu = 0;
       if (hoehe_neu > maxhoehe) hoehe_neu = maxhoehe;
-      lcd.setCursor(10,1); lcdspace(hoehe_neu); lcd.print((char)0x7F);
+      lcd.setCursor(10,1); lcdPrintNR(hoehe_neu); lcd.print((char)0x7F);
       lcd.setCursor(16,1);
       menu = 1;
   }
 
   if (menu == 3) {
     if (hoehe_neu < minhoehe) hoehe_neu = minhoehe;
-    lcd.setCursor(10,1); lcdspace(hoehe_neu); lcd.print(F(" "));
+    lcd.setCursor(10,1); lcdPrintNR(hoehe_neu); lcd.print(F(" "));
     menu = 5;
   }
 
@@ -141,7 +141,7 @@ void FUNC_einstellen(void)
   if (menu == 5) {
     if (tiefe_neu < 0) tiefe_neu = 0;
     if (tiefe_neu > maxtiefe) tiefe_neu = maxtiefe;
-    lcd.setCursor(30,0); lcdspace(tiefe_neu); lcd.print((char)0x7F);
+    lcd.setCursor(30,0); lcdPrintNR(tiefe_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 4;
   }
@@ -173,8 +173,8 @@ void FUNC_speichern(void) {
     lcd.setCursor(0,0); lcd.print(F("\176speichern in:"));
     lcd.setCursor(0,1); lcd.print(F("H\357he:"));
     lcd.setCursor(20,0);lcd.print(F("Raumtiefe:"));
-    lcd.setCursor(10,1); lcdspace(hoehe_mm);
-    lcd.setCursor(30,0); lcdspace(tiefe_mm);
+    lcd.setCursor(10,1); lcdPrintNR(hoehe_mm);
+    lcd.setCursor(30,0); lcdPrintNR(tiefe_mm);
     menu = 2;
   }
 
@@ -189,7 +189,7 @@ void FUNC_speichern(void) {
   if (menu == 2) {
       if (select_slot < 1)   select_slot= 100;
       if (select_slot > 100) select_slot= 1;
-      lcd.setCursor(14,0); lcdmspace(select_slot); lcd.print((char)0x7F);
+      lcd.setCursor(14,0); lcdmPrintNR(select_slot); lcd.print((char)0x7F);
       lcd.setCursor(16,0);
       menu = 1;
   }
@@ -243,14 +243,14 @@ void FUNC_zeigenSchnur(void)
       if (unit) {
         lcd.setCursor(0,0); lcd.print(F("\176Schritte ")); if (addr == 11) {lcd.print(F("links     "));} else {lcd.print(F("rechts    "));}
         lcd.setCursor(0,1); lcd.print(F(" "));
-        lcd.setCursor(22,0); lcdspace(targetfrontline_steps); lcd.print(F(" ")); lcdspace(currfrontline_steps);
-        lcd.setCursor(22,1); lcdspace(targetbackline_steps) ; lcd.print(F(" ")); lcdspace(currbackline_steps) ;
+        lcd.setCursor(22,0); lcdPrintNR(targetfrontline_steps); lcd.print(F(" ")); lcdPrintNR(currfrontline_steps);
+        lcd.setCursor(22,1); lcdPrintNR(targetbackline_steps) ; lcd.print(F(" ")); lcdPrintNR(currbackline_steps) ;
       }      
       if (!unit) {
         lcd.setCursor(0,0); lcd.print(F("\176L\341nge Schnur in mm:"));
         lcd.setCursor(0,1); if (addr == 11) {lcd.print(F("L"));} else {lcd.print(F("R"));}
-        lcd.setCursor(22,0); lcdspace(targetfrontline_mm); lcd.print(F(" ")); lcdspace(currfrontline_mm); lcd.print(F("  "));
-        lcd.setCursor(22,1); lcdspace(targetbackline_mm) ; lcd.print(F(" ")); lcdspace(currbackline_mm) ; lcd.print(F("  "));
+        lcd.setCursor(22,0); lcdPrintNR(targetfrontline_mm); lcd.print(F(" ")); lcdPrintNR(currfrontline_mm); lcd.print(F("  "));
+        lcd.setCursor(22,1); lcdPrintNR(targetbackline_mm) ; lcd.print(F(" ")); lcdPrintNR(currbackline_mm) ; lcd.print(F("  "));
       }
     }
   }

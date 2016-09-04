@@ -33,7 +33,7 @@ void dispaction(byte stat) { // Text zusammenstellen für Displayausgabe
   if (stat == 3) lcd.print(F("runter"));
 }
 
-int lcdspace(long x) { // Anzahl Leerzeichen vor Zahlen
+int lcdPrintNR(long x) { // Anzahl Leerzeichen vor Zahlen
   int space = 0;
     if( x >= 0) space++;
     if( abs(x) < 10) space++;
@@ -45,7 +45,7 @@ int lcdspace(long x) { // Anzahl Leerzeichen vor Zahlen
     lcd.print(x);
 }
 
-int lcdmspace(long x) { // Anzahl Leerzeichen vor kleinen Zahlen
+int lcdmPrintNR(long x) { // Anzahl Leerzeichen vor kleinen Zahlen
   int space = 0;
     if( abs(x) < 10) space++;
     if( abs(x) < 100) space++;
