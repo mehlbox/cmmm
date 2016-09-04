@@ -47,8 +47,8 @@ void FUNC_abweichnung(void)
   }
 
   if (menu == 5) {
-    if (selected_steps < -1000) selected_steps=-1000;
-    if (selected_steps >  1000) selected_steps= 1000;
+    if (selected_steps < -10000) selected_steps=-10000;
+    if (selected_steps >  10000) selected_steps= 10000;
     lcd.setCursor(28,0); lcdspace(selected_steps); lcd.print((char)0x7F);
     lcd.setCursor(34,0);
     menu = 4;
