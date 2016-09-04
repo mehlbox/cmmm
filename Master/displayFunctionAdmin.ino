@@ -371,7 +371,7 @@ void FUNC_Spule(void)
 
   if (menu == 5) {
       if (SPULE_neu < 0) SPULE_neu = 0;
-      lcd.setCursor(27,0); lcd.print(SPULE_neu); 
+      lcd.setCursor(27,0); lcdspace(SPULE_neu); 
       lcd.print((char)0x7F); lcd.print(F(" "));
       lcd.setCursor(31,0);
       menu = 4;
