@@ -254,14 +254,14 @@ void FUNC_MinMax(void)
 
   if (menu == 5) {
     if (maxhoehe_neu < 0) maxhoehe_neu = 0;
-    if (maxhoehe_neu < minhoehe_neu) maxhoehe_neu = minhoehe_neu;
-    if (maxhoehe_neu > gesamthoehe) maxhoehe_neu = gesamthoehe;
     lcd.setCursor(30,0); lcdPrintNR(maxhoehe_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 4;
   }
 
   if (menu == 6) {
+    if (maxhoehe_neu < minhoehe_neu) maxhoehe_neu = minhoehe_neu;
+    if (maxhoehe_neu > gesamthoehe) maxhoehe_neu = gesamthoehe;
     lcd.clear();
     lcd.setCursor(0,0); lcd.print(F("\176Grenzwerte:"));
     lcd.setCursor(0,1); lcd.print(F("Min-tiefe:"));
@@ -301,14 +301,14 @@ void FUNC_MinMax(void)
 
   if (menu == 11) {
     if (maxtiefe_neu < 0) maxtiefe_neu = 0;
-    if (maxtiefe_neu < mintiefe_neu) maxtiefe_neu = mintiefe_neu;
-    if (maxtiefe_neu > gesamttiefe) maxtiefe_neu = gesamttiefe;
     lcd.setCursor(30,0); lcdPrintNR(maxtiefe_neu); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 10;
   }
    
   if (menu == 15) {
+    if (maxtiefe_neu < mintiefe_neu) maxtiefe_neu = mintiefe_neu;
+    if (maxtiefe_neu > gesamttiefe)  maxtiefe_neu = gesamttiefe;
     save(104, maxhoehe_neu);
     save(105, minhoehe_neu);
     save(106, maxtiefe_neu);
