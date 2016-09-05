@@ -226,7 +226,7 @@ void loop() {
     if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
     if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
     state = 1;
-    fadeState = true;
+    fadeState = false;
   }
   
   if(state == 4 && fadeValue == 0) {
