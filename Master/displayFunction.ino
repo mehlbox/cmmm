@@ -189,7 +189,17 @@ void FUNC_speichern(void) {
   if (menu == 2) {
       if (select_slot < 1)   select_slot= 100;
       if (select_slot > 100) select_slot= 1;
+      temp_hoehe = load(select_slot);
+      temp_tiefe = load(select_slot+128);
+      if (temp_hoehe == -1) temp_hoehe = 2200;
+      if (temp_hoehe > maxhoehe) temp_hoehe = maxhoehe;
+      if (temp_hoehe < minhoehe) temp_hoehe = minhoehe;
+      if (temp_tiefe == -1) temp_tiefe = 5500;
+      if (temp_tiefe > maxtiefe) temp_tiefe = maxtiefe;
+      if (temp_tiefe < mintiefe) temp_tiefe = mintiefe;
       lcd.setCursor(14,0); lcdmPrintNR(select_slot); lcd.print((char)0x7F);
+      lcd.setCursor(10,1); lcdPrintNR(temp_hoehe);
+      lcd.setCursor(30,0); lcdPrintNR(temp_tiefe);
       lcd.setCursor(16,0);
       menu = 1;
   }
