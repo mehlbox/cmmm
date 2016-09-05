@@ -174,7 +174,7 @@ void loop() {
       Wire.write(8);
       Wire.write(gang);
       Wire.endTransmission();
-    //state = 1;
+    state = 1;
   }
 
   if (state == 1) { // Neue Werte erhalten
@@ -215,15 +215,16 @@ void loop() {
   }
   
   if(!digitalRead(_lockPin) && lastLockState == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
-    long temp_hoehe, temp_tiefe;
     checkError();
     lastLockState = 0;
-    // Tiefe nicht ändern
-    temp_hoehe = load(100);
-    if (temp_hoehe == -1) temp_hoehe = 3000;
-    if (temp_hoehe > maxhoehe) temp_hoehe = maxhoehe;
-    if (temp_hoehe < minhoehe) temp_hoehe = minhoehe;
-    hoehe_mm = temp_hoehe;
+    hoehe_mm = load(100);   // Höhe Slot 100
+    tiefe_mm = load(1+128); // Tiefe Slot 1
+    if (hoehe_mm == -1) hoehe_mm = 3200;
+    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
+    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
+    if (tiefe_mm == -1) tiefe_mm = 5800;
+    if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
+    if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
     state = 1;
     fadeState = true;
   }
@@ -236,7 +237,15 @@ void loop() {
   if(digitalRead(_lockPin) && lastLockState == 0) { // Mischpult eingeschaltet.. letzte Position laden
     checkError();
     lastLockState = 1;
-    state = 0;
+    hoehe_mm = load(1);     // Slot 1 als Standart laden
+    tiefe_mm = load(1+128); // Slot 1 als Standart laden
+    if (hoehe_mm == -1) hoehe_mm = 2200;
+    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
+    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
+    if (tiefe_mm == -1) tiefe_mm = 5800;
+    if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
+    if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
+    state = 1;
     FUNC_back(); // Menü neu aufbauen.
     fadeState = true;
   }
