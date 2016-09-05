@@ -163,6 +163,7 @@ void FUNC_einstellen(void)
 
 void FUNC_speichern(void) {
   static int select_slot;
+  static float temp_hoehe, temp_tiefe;
   if(!LCDML.FuncInit()) {
     select_slot = slot;
     menu = 0;
