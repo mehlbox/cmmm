@@ -329,7 +329,7 @@ void FUNC_Spule(void)
   static float SPULE_neu;
   static byte auswahl;
   if(!LCDML.FuncInit()) {
-    cursorOn = true;
+    cursorOn = false;
     menu = 0;
   } 
   if (menu == 0) {
@@ -371,9 +371,8 @@ void FUNC_Spule(void)
 
   if (menu == 5) {
       if (SPULE_neu < 0) SPULE_neu = 0;
-      lcd.setCursor(27,0); lcdPrintNR(SPULE_neu); 
+      lcd.setCursor(27,0); lcd.print(SPULE_neu); 
       lcd.print((char)0x7F); lcd.print(F(" "));
-      lcd.setCursor(33,0);
       menu = 4;
   }
   
