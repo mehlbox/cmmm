@@ -14,11 +14,11 @@ void newHardware() {
   save(0,   2200); // Aktuelle Position
   save(128, 5000); // Aktuelle Position
   save(101,    0); // gesamtbreite
-  save(102, 8000); // gesamttiefe
+  save(102, 7300); // gesamttiefe
   save(103, 5800); // gesamthoehe
   save(104, 3500); // maxhoehe
   save(105, 1000); // minhoehe
-  save(106, 6000); // maxraumtiefe
+  save(106, 6500); // maxraumtiefe
   save(107, 2000); // minraumtiefe
   save(108,  800);  // Geschwindigkeit 
   save(109, 29500);// Spulendurchmesser vorne
