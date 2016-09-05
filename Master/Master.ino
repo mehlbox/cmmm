@@ -28,7 +28,7 @@
 #define _LCDMenuLib_cfg_initscreen_time  5000   /* 0=time disabled, >0 wait time in ms */
 #define _LCDMenuLib_cfg_scrollbar	       1      /* 0=no scrollbar, 1=complex scrollbar, 2=easy scrollbar */
 #define _LCDMenuLib_cfg_lcd_standard	   0      /* 0=HD44780 standard / 1=HD44780U standard */
-#define _LCDMenuLib_cfg_press_time       50     /* button press time in ms */
+#define _LCDMenuLib_cfg_press_time       100     /* button press time in ms */
 
 #define _lockPin  A2
 #define _lightPin 10
