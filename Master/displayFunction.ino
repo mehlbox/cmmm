@@ -59,10 +59,10 @@ void FUNC_laden(void) {
       if (select_slot > 100) select_slot= 1;
       temp_hoehe = load(select_slot);
       temp_tiefe = load(select_slot+128);
-      if (temp_hoehe == -1) temp_hoehe = 2500;
+      if (temp_hoehe == -1) temp_hoehe = 2200;
       if (temp_hoehe > maxhoehe) temp_hoehe = maxhoehe;
       if (temp_hoehe < minhoehe) temp_hoehe = minhoehe;
-      if (temp_tiefe == -1) temp_tiefe = 0;
+      if (temp_tiefe == -1) temp_tiefe = 5500;
       if (temp_tiefe > maxtiefe) temp_tiefe = maxtiefe;
       if (temp_tiefe < mintiefe) temp_tiefe = mintiefe;
       lcd.setCursor(10,0); lcdPrintNR(select_slot);
