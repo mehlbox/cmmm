@@ -37,12 +37,12 @@ void LCDbackground() {
   if (fadeState && millis() - fadeTimer > 10 && fadeValue < 255){ // fade in Displayhelligkeit
     fadeTimer = millis();
     fadeValue ++;
-    analogWrite(10, fadeValue);
+    analogWrite(_lightPin, fadeValue);
   }
 
   if (!fadeState && millis() - fadeTimer > 50 && fadeValue > 0){ // fade out Displayhelligkeit
     fadeTimer = millis();
     fadeValue --;
-    analogWrite(10, fadeValue);
+    analogWrite(_lightPin, fadeValue);
   }
 }
