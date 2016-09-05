@@ -13,7 +13,7 @@ Für die restlichen Speicherplätze siehe funktion newHardware()
 void newHardware() {
   save(0,   2200); // Aktuelle Position
   save(128, 5000); // Aktuelle Position
-  save(101,    0); // gesamtbreite
+  save(101, 4600); // gesamtbreite
   save(102, 7300); // gesamttiefe
   save(103, 5800); // gesamthoehe
   save(104, 3500); // maxhoehe
