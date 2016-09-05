@@ -66,7 +66,7 @@ LCDMenuLib_add(8 , root_8       , 1  , "Abweichung Schnur" ,  FUNC_abweichnung);
 LCDMenuLib_add(9 , root_8       , 2  , "Zeige Schnurl\341nge",FUNC_zeigenSchnur);
 LCDMenuLib_add(10, root_8       , 3  , "Drehrichtung"      , FUNC_drehrichtung);
 LCDMenuLib_add(11, root_8       , 4  , "Aktionsbereich"    , FUNC_bereich);
-LCDMenuLib_add(12, root_8       , 5  , "MinMax H\357he"    , FUNC_MinMax);
+LCDMenuLib_add(12, root_8       , 5  , "MinMax Werte"    , FUNC_MinMax);
 LCDMenuLib_add(13, root_8       , 6  , "Spulen"            , FUNC_Spule);
 LCDMenuLib_add(14, root_8       , 7  , "Motoren"           , FUNC_motoren);
 LCDMenuLib_add(15, root_8       , 8  , "Speicher auslesen" , FUNC_speicherLesen);
