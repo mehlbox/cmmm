@@ -1,3 +1,14 @@
+void checkLimits(unsigned long* tempHeight, unsigned long* tempDepth) {
+  if (*tempHeight == -1) *tempHeight = 2200;
+  if (*tempDepth == -1) *tempDepth = 5800;
+  
+  if (*tempHeight > maxhoehe) *tempHeight = maxhoehe;
+  if (*tempHeight < minhoehe) *tempHeight = minhoehe;
+
+  if (*tempDepth > maxtiefe) *tempDepth = maxtiefe;
+  if (*tempDepth < mintiefe) *tempDepth = mintiefe;
+}
+
 int caladdr(byte motor) { // Adresse berechnen
   if ( motor == 0) return 0; // broadcast
   if ( motor == 1) return 11;

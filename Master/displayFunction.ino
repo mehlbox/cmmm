@@ -31,7 +31,7 @@ void FUNC_aktuellPos(void) {
 
 void FUNC_laden(void) {
   static int select_slot;
-  static float temp_hoehe, temp_tiefe;
+  static unsigned long tempHeight, tempDepth;
   if(!LCDML.FuncInit()) {
     select_slot = slot;
     menu = 0;
@@ -57,17 +57,12 @@ void FUNC_laden(void) {
   if (menu == 2) {
       if (select_slot < 1)   select_slot= 100;
       if (select_slot > 100) select_slot= 1;
-      temp_hoehe = load(select_slot);
-      temp_tiefe = load(select_slot+128);
-      if (temp_hoehe == -1) temp_hoehe = 2200;
-      if (temp_hoehe > maxhoehe) temp_hoehe = maxhoehe;
-      if (temp_hoehe < minhoehe) temp_hoehe = minhoehe;
-      if (temp_tiefe == -1) temp_tiefe = 5500;
-      if (temp_tiefe > maxtiefe) temp_tiefe = maxtiefe;
-      if (temp_tiefe < mintiefe) temp_tiefe = mintiefe;
+      tempHeight = load(select_slot);
+      tempDepth = load(select_slot+128);
+      checkLimits(&tempHeight, &tempDepth);
       lcd.setCursor(10,0); lcdPrintNR(select_slot);
-      lcd.setCursor(10,1); lcdPrintNR(temp_hoehe);
-      lcd.setCursor(30,0); lcdPrintNR(temp_tiefe);
+      lcd.setCursor(10,1); lcdPrintNR(tempHeight);
+      lcd.setCursor(30,0); lcdPrintNR(tempDepth);
       lcd.setCursor(16,0);
       menu = 1;
   }
@@ -75,8 +70,8 @@ void FUNC_laden(void) {
   if (menu == 7) {
     slot = select_slot;
     save(120,slot);
-    hoehe_mm = temp_hoehe;
-    tiefe_mm = temp_tiefe;
+    hoehe_mm = tempHeight;
+    tiefe_mm = tempDepth;
     state = 1;
     animation();
     menu = 99;
@@ -91,65 +86,66 @@ void FUNC_laden(void) {
 
 void FUNC_einstellen(void)
 { 
-  static long hoehe_neu, tiefe_neu;
+  static unsigned long tempHeight, tempDepth;
   if(!LCDML.FuncInit()) {
     menu = 0;
     cursorOn = true;
-    hoehe_neu = hoehe_mm;
-    tiefe_neu = tiefe_mm;
+    tempHeight = hoehe_mm;
+    tempDepth = tiefe_mm;
   } 
   if (menu == 0) {
     lcd.clear();
     lcd.setCursor(0,0); lcd.print(F("\176einstellen in mm:"));
     lcd.setCursor(0,1); lcd.print(F("H\357he:"));
     lcd.setCursor(20,0);lcd.print(F("Raumtiefe:"));
-    lcd.setCursor(10,1); lcdPrintNR(hoehe_neu);
-    lcd.setCursor(30,0); lcdPrintNR(tiefe_neu);
+    lcd.setCursor(10,1); lcdPrintNR(tempHeight);
+    lcd.setCursor(30,0); lcdPrintNR(tempDepth);
     menu = 2;
   }
 
   if (menu == 1) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    hoehe_neu ++; menu = 2; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  hoehe_neu --; menu = 2; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); hoehe_neu = hoehe_neu / 10; menu = 2; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  hoehe_neu = hoehe_neu * 10; menu = 2; }
+    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    tempHeight ++; menu = 2; }
+    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  tempHeight --; menu = 2; }
+    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); tempHeight = tempHeight / 10; menu = 2; }
+    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  tempHeight = tempHeight * 10; menu = 2; }
     if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 3; }
   }
 
   if (menu == 2) {
-      if (hoehe_neu < 0) hoehe_neu = 0;
-      if (hoehe_neu > maxhoehe) hoehe_neu = maxhoehe;
-      lcd.setCursor(10,1); lcdPrintNR(hoehe_neu); lcd.print((char)0x7F);
+      if (tempHeight < 0) tempHeight = 0;
+      if (tempHeight > maxhoehe) tempHeight = maxhoehe;
+      lcd.setCursor(10,1); lcdPrintNR(tempHeight); lcd.print((char)0x7F);
       lcd.setCursor(16,1);
       menu = 1;
   }
 
   if (menu == 3) {
-    if (hoehe_neu < minhoehe) hoehe_neu = minhoehe;
-    lcd.setCursor(10,1); lcdPrintNR(hoehe_neu); lcd.print(F(" "));
+    if (tempHeight < minhoehe) tempHeight = minhoehe;
+    lcd.setCursor(10,1); lcdPrintNR(tempHeight); lcd.print(F(" "));
     menu = 5;
   }
 
   if (menu == 4) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    tiefe_neu ++; menu = 5; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  tiefe_neu --; menu = 5; } 
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); tiefe_neu = tiefe_neu/10; menu = 5; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  tiefe_neu = tiefe_neu*10; menu = 5; }
+    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    tempDepth ++; menu = 5; }
+    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  tempDepth --; menu = 5; } 
+    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); tempDepth = tempDepth/10; menu = 5; }
+    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  tempDepth = tempDepth*10; menu = 5; }
     if (LCDMenuLib_checkButtonEnter()) { menu = 7; }
   }
 
   if (menu == 5) {
-    if (tiefe_neu < 0) tiefe_neu = 0;
-    if (tiefe_neu > maxtiefe) tiefe_neu = maxtiefe;
-    lcd.setCursor(30,0); lcdPrintNR(tiefe_neu); lcd.print((char)0x7F);
+    if (tempDepth < 0) tempDepth = 0;
+    if (tempDepth > maxtiefe) tempDepth = maxtiefe;
+    lcd.setCursor(30,0); lcdPrintNR(tempDepth); lcd.print((char)0x7F);
     lcd.setCursor(36,0);
     menu = 4;
   }
 
   if (menu == 7) {
-    if (tiefe_neu < mintiefe) tiefe_neu = mintiefe;
-    hoehe_mm = hoehe_neu;
-    tiefe_mm = tiefe_neu;
+    if (tempDepth < mintiefe) tempDepth = mintiefe;
+    checkLimits(&tempHeight, &tempDepth);
+    hoehe_mm = tempHeight;
+    tiefe_mm = tempDepth;
     state = 1;
     menu = 99;
     animation();
@@ -163,7 +159,7 @@ void FUNC_einstellen(void)
 
 void FUNC_speichern(void) {
   static int select_slot;
-  static float temp_hoehe, temp_tiefe;
+  static unsigned long tempHeight, tempDepth;
   if(!LCDML.FuncInit()) {
     select_slot = slot;
     menu = 0;
@@ -190,17 +186,12 @@ void FUNC_speichern(void) {
   if (menu == 2) {
       if (select_slot < 1)   select_slot= 100;
       if (select_slot > 100) select_slot= 1;
-      temp_hoehe = load(select_slot);
-      temp_tiefe = load(select_slot+128);
-      if (temp_hoehe == -1) temp_hoehe = 2200;
-      if (temp_hoehe > maxhoehe) temp_hoehe = maxhoehe;
-      if (temp_hoehe < minhoehe) temp_hoehe = minhoehe;
-      if (temp_tiefe == -1) temp_tiefe = 5500;
-      if (temp_tiefe > maxtiefe) temp_tiefe = maxtiefe;
-      if (temp_tiefe < mintiefe) temp_tiefe = mintiefe;
+      tempHeight = load(select_slot);
+      tempDepth = load(select_slot+128);
+      checkLimits(&tempHeight, &tempDepth);
       lcd.setCursor(14,0); lcdmPrintNR(select_slot); lcd.print((char)0x7F);
-      lcd.setCursor(10,1); lcdPrintNR(temp_hoehe);
-      lcd.setCursor(30,0); lcdPrintNR(temp_tiefe);
+      lcd.setCursor(10,1); lcdPrintNR(tempHeight);
+      lcd.setCursor(30,0); lcdPrintNR(tempDepth);
       lcd.setCursor(16,0);
       menu = 1;
   }

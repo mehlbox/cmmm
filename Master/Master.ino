@@ -151,14 +151,7 @@ void loop() {
     minhoehe = load(105);
     maxtiefe  = load(106);
     mintiefe  = load(107);
-
-    if (hoehe_mm == -1) hoehe_mm = 2200;
-    if (tiefe_mm == -1) tiefe_mm = 5000;
-    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
-    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
-    if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
-    if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
-    
+    checkLimits(&hoehe_mm, &tiefe_mm);
     motorSpeed = load(108);
     SPULEv = load(109) * 0.001;
     SPULEh = load(110) * 0.001;
@@ -219,12 +212,7 @@ void loop() {
     lastLockState = 0;
     hoehe_mm = load(100);   // Höhe Slot 100
     tiefe_mm = load(1+128); // Tiefe Slot 1
-    if (hoehe_mm == -1) hoehe_mm = 3200;
-    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
-    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
-    if (tiefe_mm == -1) tiefe_mm = 5800;
-    if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
-    if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
+    checkLimits(&hoehe_mm, &tiefe_mm);
     state = 1;
     fadeState = false;
   }
@@ -239,12 +227,7 @@ void loop() {
     lastLockState = 1;
     hoehe_mm = load(1);     // Slot 1 als Standart laden
     tiefe_mm = load(1+128); // Slot 1 als Standart laden
-    if (hoehe_mm == -1) hoehe_mm = 2200;
-    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
-    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
-    if (tiefe_mm == -1) tiefe_mm = 5800;
-    if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
-    if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
+    checkLimits(&hoehe_mm, &tiefe_mm);
     state = 1;
     FUNC_back(); // Menü neu aufbauen.
     fadeState = true;
