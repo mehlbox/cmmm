@@ -58,11 +58,12 @@ void FUNC_laden(void) {
       if (select_slot < 1)   select_slot= 100;
       if (select_slot > 100) select_slot= 1;
       tempHeight = load(select_slot);
-      tempDepth = load(select_slot+128);
+      tempDepth  = load(select_slot+128);
       checkLimits(&tempHeight, &tempDepth);
       lcd.setCursor(10,0); lcdPrintNR(select_slot);
       lcd.setCursor(10,1); lcdPrintNR(tempHeight);
       lcd.setCursor(30,0); lcdPrintNR(tempDepth);
+      nameSlot(select_slot);
       lcd.setCursor(16,0);
       menu = 1;
   }
@@ -192,6 +193,7 @@ void FUNC_speichern(void) {
       lcd.setCursor(14,0); lcdmPrintNR(select_slot); lcd.print((char)0x7F);
       lcd.setCursor(10,1); lcdPrintNR(tempHeight);
       lcd.setCursor(30,0); lcdPrintNR(tempDepth);
+      nameSlot(select_slot);
       lcd.setCursor(16,0);
       menu = 1;
   }

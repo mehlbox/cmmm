@@ -1,3 +1,20 @@
+void nameSlot(int temp_slot) {
+  lcd.setCursor(22,1);
+  switch(temp_slot) {
+    case 1 : lcd.print(F("Standart         ")); break;
+    case 2 : lcd.print(F("Jugendchor       ")); break;
+    case 3 : lcd.print(F("Jungscharchor    ")); break;
+    case 4 : lcd.print(F("Kinderchor 1     ")); break;
+    case 5 : lcd.print(F("Kinderchor 2     ")); break;
+    case 6 : lcd.print(F("Blasorchester    ")); break;
+    case 7 : lcd.print(F("Streichorchester ")); break;
+    case 8 : lcd.print(F("Sinfonieorchester")); break;
+    case 9 : lcd.print(F("Vororchester     ")); break;
+    case 100:lcd.print(F("Parkposition     ")); break;
+    default: lcd.print(F("                 ")); break;
+  }
+}
+
 void animation() { // Animation (beim senden)
   for (int n=0; n<20; n++) {
     lcd.setCursor(n,0);
