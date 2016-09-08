@@ -38,11 +38,7 @@ void FUNC_abweichnung_schnur(void) {
   }
 
   if (menu == 4) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    selected_steps++; menu = 5; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  selected_steps--; menu = 5; } 
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); selected_steps=selected_steps/10; menu = 5; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  selected_steps=selected_steps*10; menu = 5; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 7; }
+    checkButtonsLong(&selected_steps, 5, 7, 0);
   }
 
   if (menu == 5) {
@@ -111,7 +107,7 @@ void FUNC_drehrichtung(void) {
 
 void FUNC_bereich(void)
 { 
-  static long gesamtbreite_neu, gesamttiefe_neu, gesamthoehe_neu;
+  static unsigned long gesamtbreite_neu, gesamttiefe_neu, gesamthoehe_neu;
   if(!LCDML.FuncInit()) {
     cursorOn = true;
     menu = 0;
@@ -132,11 +128,7 @@ void FUNC_bereich(void)
   }
 
   if (menu == 1) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    gesamthoehe_neu ++; menu = 2; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  gesamthoehe_neu --; menu = 2; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); gesamthoehe_neu = gesamthoehe_neu / 10; menu = 2; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  gesamthoehe_neu = gesamthoehe_neu * 10; menu = 2; }
-    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 3; }
+    checkButtonsLong(&gesamthoehe_neu, 2, 3, 1);
   }
 
   if (menu == 2) {
@@ -152,11 +144,7 @@ void FUNC_bereich(void)
   }
 
   if (menu == 4) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    gesamttiefe_neu ++; menu = 5; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  gesamttiefe_neu --; menu = 5; } 
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); gesamttiefe_neu = gesamttiefe_neu/10; menu = 5; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  gesamttiefe_neu = gesamttiefe_neu*10; menu = 5; }
-    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 6; }
+    checkButtonsLong(&gesamthoehe_neu, 5, 6, 1);
   }
 
   if (menu == 5) {
@@ -172,11 +160,7 @@ void FUNC_bereich(void)
   }
   
   if (menu == 7) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    gesamtbreite_neu ++; menu = 8; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  gesamtbreite_neu --; menu = 8; } 
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); gesamtbreite_neu = gesamtbreite_neu/10; menu = 8; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  gesamtbreite_neu = gesamtbreite_neu*10; menu = 8; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 15; }
+    checkButtonsLong(&gesamtbreite_neu, 8, 15, 0);
   }
 
   if (menu == 8) {
@@ -203,7 +187,7 @@ void FUNC_bereich(void)
 
 void FUNC_MinMax(void)
 { 
-  static long minhoehe_neu, maxhoehe_neu, mintiefe_neu, maxtiefe_neu;
+  static unsigned long minhoehe_neu, maxhoehe_neu, mintiefe_neu, maxtiefe_neu;
   if(!LCDML.FuncInit()) {
     cursorOn = true;
     menu = 0;
@@ -224,11 +208,7 @@ void FUNC_MinMax(void)
   }
 
   if (menu == 1) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    minhoehe_neu ++; menu = 2; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  minhoehe_neu --; menu = 2; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); minhoehe_neu = minhoehe_neu / 10; menu = 2; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  minhoehe_neu = minhoehe_neu * 10; menu = 2; }
-    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 3; }
+    checkButtonsLong(&minhoehe_neu, 2, 3, 1);
   }
 
   if (menu == 2) {
@@ -244,11 +224,7 @@ void FUNC_MinMax(void)
   }
 
   if (menu == 4) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    maxhoehe_neu ++; menu = 5; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  maxhoehe_neu --; menu = 5; } 
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); maxhoehe_neu = maxhoehe_neu/10; menu = 5; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  maxhoehe_neu = maxhoehe_neu*10; menu = 5; }
-    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 6; }
+    checkButtonsLong(&maxhoehe_neu, 5, 6, 1);
   }
 
   if (menu == 5) {
@@ -271,11 +247,7 @@ void FUNC_MinMax(void)
   }
 
   if (menu == 7) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    mintiefe_neu ++; menu = 8; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  mintiefe_neu --; menu = 8; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); mintiefe_neu = mintiefe_neu / 10; menu = 8; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  mintiefe_neu = mintiefe_neu * 10; menu = 8; }
-    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 9; }
+    checkButtonsLong(&mintiefe_neu, 8, 9, 1);
   }
 
   if (menu == 8) {
@@ -291,11 +263,7 @@ void FUNC_MinMax(void)
   }
 
   if (menu == 10) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    maxtiefe_neu ++; menu = 11; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  maxtiefe_neu --; menu = 11; } 
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); maxtiefe_neu = maxtiefe_neu/10; menu = 11; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  maxtiefe_neu = maxtiefe_neu*10; menu = 11; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 15; }
+    checkButtonsLong(&maxtiefe_neu, 11, 15, 0);
   }
 
   if (menu == 11) {
@@ -392,8 +360,8 @@ void FUNC_Spule(void)
 
 void FUNC_motoren(void)
 { 
-  static long motorSpeed_neu;
-  static byte gear_neu, ratio_neu;
+  static unsigned long motorSpeed_neu;
+  static unsigned int gear_neu, ratio_neu;
   if(!LCDML.FuncInit()) {
     cursorOn = true;
     menu = 0;
@@ -414,11 +382,7 @@ void FUNC_motoren(void)
   }
 
   if (menu == 1) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    motorSpeed_neu ++; menu = 2; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  motorSpeed_neu --; menu = 2; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); motorSpeed_neu = motorSpeed_neu / 10; menu = 2; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  motorSpeed_neu = motorSpeed_neu * 10; menu = 2; }
-    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 3; }
+    checkButtonsLong(&motorSpeed_neu, 2, 3, 1);
   }
 
   if (menu == 2) {
@@ -454,11 +418,7 @@ void FUNC_motoren(void)
   }
 
   if (menu == 7) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    ratio_neu ++; menu = 8; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  ratio_neu --; menu = 8; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); ratio_neu = ratio_neu - 10; menu = 8; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  ratio_neu = ratio_neu + 10; menu = 8; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 15; }
+    checkButtonsInt(&ratio_neu, 8, 15, 0);
   }
 
   if (menu == 8) {
@@ -488,7 +448,7 @@ void FUNC_motoren(void)
 }
 
 void FUNC_speicherLesen(void) {
-  static int select_slot;
+  static unsigned int select_slot;
   if(!LCDML.FuncInit()) {
     select_slot = slot;
     cursorOn = false;
@@ -501,11 +461,7 @@ void FUNC_speicherLesen(void) {
   }
 
   if (menu == 1) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    select_slot++; menu = 2; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  select_slot--; menu = 2; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); select_slot = select_slot + 10; menu = 2; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  select_slot = select_slot - 10; menu = 2; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 7; }
+    checkButtonsInt(&select_slot, 2, 7, 0);
   }
 
   if (menu == 2) {
