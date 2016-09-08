@@ -50,7 +50,7 @@
 
 
 // Menue
-#define _LCDMenuLib_cnt    15  // last element id
+#define _LCDMenuLib_cnt    16  // last element id
 /* init lcdmenulib */
 LCDMenuLib_init(_LCDMenuLib_cnt);
 /* LCDMenuLib_element(id, prev_layer_element, new_element_num, lang_string, callback_function) */
@@ -62,14 +62,15 @@ LCDMenuLib_add(4 , root         , 5  , "Motor Stop !!"      , FUNC_motorStop);
 LCDMenuLib_add(5 , root         , 6  , "Status"             , FUNC_status);
 LCDMenuLib_add(6 , root         , 7  , "Zeige Schnurl\341nge",FUNC_zeigenSchnur);
 LCDMenuLib_add(7 , root         , 8  , "Admin Funktionen"   , FUNC_Admin);
-LCDMenuLib_add(8 , root_8       , 1  , "Abweichung Schnur" ,  FUNC_abweichnung);
-LCDMenuLib_add(9 , root_8       , 2  , "Zeige Schnurl\341nge",FUNC_zeigenSchnur);
-LCDMenuLib_add(10, root_8       , 3  , "Drehrichtung"      , FUNC_drehrichtung);
-LCDMenuLib_add(11, root_8       , 4  , "Aktionsbereich"    , FUNC_bereich);
-LCDMenuLib_add(12, root_8       , 5  , "MinMax Werte"    , FUNC_MinMax);
-LCDMenuLib_add(13, root_8       , 6  , "Spulen"            , FUNC_Spule);
-LCDMenuLib_add(14, root_8       , 7  , "Motoren"           , FUNC_motoren);
-LCDMenuLib_add(15, root_8       , 8  , "Speicher auslesen" , FUNC_speicherLesen);
+LCDMenuLib_add(8 , root_8       , 1  , "Abweichung Schnur"  , FUNC_abweichnung_schnur);
+LCDMenuLib_add(9 , root_8       , 2  , "Abweich. Abmessung" , FUNC_abweichnung_abmess);
+LCDMenuLib_add(10, root_8       , 3  , "Zeige Schnurl\341nge",FUNC_zeigenSchnur);
+LCDMenuLib_add(11, root_8       , 4  , "Drehrichtung"      , FUNC_drehrichtung);
+LCDMenuLib_add(12, root_8       , 5  , "Aktionsbereich"    , FUNC_bereich);
+LCDMenuLib_add(13, root_8       , 6  , "MinMax Werte"      , FUNC_MinMax);
+LCDMenuLib_add(14, root_8       , 7  , "Spulen"            , FUNC_Spule);
+LCDMenuLib_add(15, root_8       , 8  , "Motoren"           , FUNC_motoren);
+LCDMenuLib_add(16, root_8       , 9  , "Speicher auslesen" , FUNC_speicherLesen);
 LCDMenuLib_createMenu(_LCDMenuLib_cnt);
 
 float SPULEv, SPULEh;   // durchmesser Spule in mm

@@ -2,8 +2,98 @@ void FUNC_Admin(void){  // Zugangssperre wenn Admin nicht freigeschalten
   if (millis() - adminTimer > 300000) LCDML.FuncEnd(1, 0, 0, 0, 0, 0);  // (direct, enter, up, down, left, right)
 }
 
-void FUNC_abweichnung(void)
-{ 
+
+void FUNC_abweichnung_abmess(void) { 
+  static unsigned long tempHeight, tempDepth;
+  if(!LCDML.FuncInit()) {
+    menu = 0;
+    cursorOn = true;
+    tempHeight = hoehe_mm;
+    tempDepth  = tiefe_mm;
+  } 
+  if (menu == 0) {
+    lcd.clear();
+    lcd.setCursor(0,0); lcd.print(F("\176einstellen in mm:"));
+    lcd.setCursor(0,1); lcd.print(F("H\357he:"));
+    lcd.setCursor(20,0);lcd.print(F("Raumtiefe:"));
+    lcd.setCursor(10,1); lcdPrintNR(tempHeight);
+    lcd.setCursor(30,0); lcdPrintNR(tempDepth);
+    menu = 2;
+  }
+
+  if (menu == 1) {
+    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    tempHeight ++; menu = 2; }
+    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  tempHeight --; menu = 2; }
+    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); tempHeight = tempHeight / 10; menu = 2; }
+    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  tempHeight = tempHeight * 10; menu = 2; }
+    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 3; }
+  }
+
+  if (menu == 2) {
+      if (tempHeight < 0) tempHeight = 0;
+      if (tempHeight > gesamthoehe) tempHeight = gesamthoehe;
+      lcd.setCursor(10,1); lcdPrintNR(tempHeight); lcd.print((char)0x7F);
+      lcd.setCursor(16,1);
+      menu = 1;
+  }
+
+  if (menu == 3) {
+    lcd.setCursor(10,1); lcdPrintNR(tempHeight); lcd.print(F(" "));
+    menu = 5;
+  }
+
+  if (menu == 4) {
+    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    tempDepth ++; menu = 5; }
+    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  tempDepth --; menu = 5; } 
+    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); tempDepth = tempDepth/10; menu = 5; }
+    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  tempDepth = tempDepth*10; menu = 5; }
+    if (LCDMenuLib_checkButtonEnter()) { menu = 7; }
+  }
+
+  if (menu == 5) {
+    if (tempDepth < 0) tempDepth = 0;
+    if (tempDepth > gesamttiefe) tempDepth = gesamttiefe;
+    lcd.setCursor(30,0); lcdPrintNR(tempDepth); lcd.print((char)0x7F);
+    lcd.setCursor(36,0);
+    menu = 4;
+  }
+
+  if (menu == 7) {
+  static float a, b, c, d, h, w, F_hoehe_mm, F_tiefe_mm;
+  F_hoehe_mm = tempHeight;
+  F_tiefe_mm = tempDepth;
+  w = gesamtbreite * 0.5; 
+  h = gesamthoehe - F_hoehe_mm;   // Abstand vom Boden
+  a = gesamttiefe - F_tiefe_mm;   // Abstand von der Wand
+  c = sqrt(sq(a)+sq(h)+sq(w));
+  targetbackline_mm = c + 0.5; // weil bei float in long immer abgerundet wird
+  b = gesamttiefe - a;
+  d = sqrt(sq(b)+sq(h)+sq(w)); // Inhalt der Wurzel
+  targetfrontline_mm = d + 0.5; // weil bei float in long immer abgerundet wird
+  //Motor Stop
+  Wire.beginTransmission(0);
+  Wire.write(0);
+  Wire.endTransmission();
+  getCurrent(11);
+  targetfrontline_steps = mmTOsteps(targetfrontline_mm,1);
+  targetbackline_steps  = mmTOsteps(targetbackline_mm,0);
+  sendLong(mmTOsteps(targetfrontline_steps - currfrontline_steps,1),1, 7); //vorne  L
+  sendLong(mmTOsteps(targetbackline_steps  - currbackline_steps ,0),2, 7); //hinten L
+  sendLong(mmTOsteps(targetfrontline_steps - currfrontline_steps,1),3, 7); //vorne  R
+  sendLong(mmTOsteps(targetbackline_steps  - currbackline_steps ,0),4, 7); //hinten R
+    state = 1;
+    menu = 99;
+    animation();
+  }
+
+  if (menu == 99) {
+    cursorOn = false;
+    LCDML.FuncEnd(1, 0, 0, 0, 0, 0);  // (direct, enter, up, down, left, right)
+  }
+}
+
+
+void FUNC_abweichnung_schnur(void) { 
   static byte selected_motor;
   static long selected_steps;
   if(!LCDML.FuncInit()) {
