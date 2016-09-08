@@ -5,11 +5,12 @@ void FUNC_aktuellPos(void) {
   } 
   if (menu == 0) {
     lcd.clear();
-    lcd.setCursor(0,0); lcd.print(F("\176Position in mm:"));
+    lcd.setCursor(0,0); lcd.print(F("\176Position: Slot:")); lcd.print(slot);
     lcd.setCursor(0,1); lcd.print(F("H\357he:"));
     lcd.setCursor(20,0);lcd.print(F("Raumtiefe:"));
     lcd.setCursor(10,1); lcdPrintNR(hoehe_mm);
     lcd.setCursor(30,0); lcdPrintNR(tiefe_mm);
+    nameSlot(slot);
     menu = 1;
   }
 
@@ -30,7 +31,7 @@ void FUNC_aktuellPos(void) {
 }
 
 void FUNC_laden(void) {
-  static int select_slot;
+  static unsigned int select_slot;
   static unsigned long tempHeight, tempDepth;
   if(!LCDML.FuncInit()) {
     select_slot = slot;
@@ -47,11 +48,7 @@ void FUNC_laden(void) {
   }
 
   if (menu == 1) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    select_slot++; menu = 2; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  select_slot--; menu = 2; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); select_slot = select_slot + 10; menu = 2; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  select_slot = select_slot - 10; menu = 2; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 7; }
+    checkButtonsInt(&select_slot, 2, 7, 0);
   }
 
   if (menu == 2) {
@@ -104,11 +101,7 @@ void FUNC_einstellen(void) {
   }
 
   if (menu == 1) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    tempHeight ++; menu = 2; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  tempHeight --; menu = 2; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); tempHeight = tempHeight / 10; menu = 2; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  tempHeight = tempHeight * 10; menu = 2; }
-    if (LCDMenuLib_checkButtonEnter()) { LCDMenuLib_resetButtonEnter(); menu = 3; }
+    checkButtonsLong(&tempHeight, 2, 3, 1);
   }
 
   if (menu == 2) {
@@ -126,11 +119,7 @@ void FUNC_einstellen(void) {
   }
 
   if (menu == 4) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    tempDepth ++; menu = 5; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  tempDepth --; menu = 5; } 
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); tempDepth = tempDepth/10; menu = 5; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  tempDepth = tempDepth*10; menu = 5; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 7; }
+    checkButtonsLong(&tempDepth, 5, 7, 0);
   }
 
   if (menu == 5) {
@@ -158,7 +147,7 @@ void FUNC_einstellen(void) {
 }
 
 void FUNC_speichern(void) {
-  static int select_slot;
+  static unsigned int select_slot;
   static unsigned long tempHeight, tempDepth;
   if(!LCDML.FuncInit()) {
     select_slot = slot;
@@ -176,11 +165,7 @@ void FUNC_speichern(void) {
   }
 
   if (menu == 1) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    select_slot++; menu = 2; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  select_slot--; menu = 2; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); select_slot = select_slot + 10; menu = 2; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  select_slot = select_slot - 10; menu = 2; }
-    if (LCDMenuLib_checkButtonEnter()) { menu = 7; }
+    checkButtonsInt(&select_slot, 2, 7, 0);
   }
 
   if (menu == 2) {
