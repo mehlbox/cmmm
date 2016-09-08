@@ -24,8 +24,6 @@ byte calmotor(byte motor) { // Motor berechnen
   if ( motor == 4) return 2;
 }
 
-
-
 unsigned long mmTOsteps(float mm, byte voh) { // umrechnung //vorne oder hinten
   static float x, SPULE;
   if (voh) SPULE = SPULEv; else SPULE = SPULEh;
