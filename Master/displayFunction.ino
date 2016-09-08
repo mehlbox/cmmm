@@ -85,8 +85,7 @@ void FUNC_laden(void) {
 
 }
 
-void FUNC_einstellen(void)
-{ 
+void FUNC_einstellen(void) { 
   static unsigned long tempHeight, tempDepth;
   if(!LCDML.FuncInit()) {
     menu = 0;
