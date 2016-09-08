@@ -46,3 +46,15 @@ void LCDbackground() {
     analogWrite(_lightPin, fadeValue);
   }
 }
+
+void checkMenuButtons(int* buttonCalc, int menuAction, int menuEnter, byte menuEnterReset) {
+    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    *buttonCalc++; menu = menuAction; }
+    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  *buttonCalc--; menu = menuAction; }
+    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); *buttonCalc = *buttonCalc + 10; menu = menuAction; }
+    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  *buttonCalc = *buttonCalc - 10; menu = menuAction; }
+    if (LCDMenuLib_checkButtonEnter()) {
+      menu = menuEnter;
+      if (menuEnterReset) LCDMenuLib_resetButtonEnter();
+      }
+}
+

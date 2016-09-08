@@ -2,7 +2,6 @@ void FUNC_Admin(void){  // Zugangssperre wenn Admin nicht freigeschalten
   if (millis() - adminTimer > 300000) LCDML.FuncEnd(1, 0, 0, 0, 0, 0);  // (direct, enter, up, down, left, right)
 }
 
-
 void FUNC_abweichnung_abmess(void) { 
   static unsigned long tempHeight, tempDepth;
   if(!LCDML.FuncInit()) {
