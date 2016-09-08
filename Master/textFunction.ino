@@ -1,5 +1,5 @@
 void nameSlot(int temp_slot) {
-  lcd.setCursor(22,1);
+  lcd.setCursor(21,1);
   switch(temp_slot) {
     case 1 : lcd.print(F("Standart         ")); break;
     case 2 : lcd.print(F("Jugendchor       ")); break;
