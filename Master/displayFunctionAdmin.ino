@@ -59,29 +59,19 @@ void FUNC_abweichnung_abmess(void) {
   }
 
   if (menu == 7) {
-  static float a, b, c, d, h, w, F_hoehe_mm, F_tiefe_mm;
-  F_hoehe_mm = tempHeight;
-  F_tiefe_mm = tempDepth;
-  w = gesamtbreite * 0.5; 
-  h = gesamthoehe - F_hoehe_mm;   // Abstand vom Boden
-  a = gesamttiefe - F_tiefe_mm;   // Abstand von der Wand
-  c = sqrt(sq(a)+sq(h)+sq(w));
-  targetbackline_mm = c + 0.5; // weil bei float in long immer abgerundet wird
-  b = gesamttiefe - a;
-  d = sqrt(sq(b)+sq(h)+sq(w)); // Inhalt der Wurzel
-  targetfrontline_mm = d + 0.5; // weil bei float in long immer abgerundet wird
   //Motor Stop
   Wire.beginTransmission(0);
   Wire.write(0);
   Wire.endTransmission();
   getCurrent(11);
-  targetfrontline_steps = mmTOsteps(targetfrontline_mm,1);
-  targetbackline_steps  = mmTOsteps(targetbackline_mm,0);
+  CoordinateTOline(tempHeight, tempDepth);
   sendLong(mmTOsteps(targetfrontline_steps - currfrontline_steps,1),1, 7); //vorne  L
   sendLong(mmTOsteps(targetbackline_steps  - currbackline_steps ,0),2, 7); //hinten L
   sendLong(mmTOsteps(targetfrontline_steps - currfrontline_steps,1),3, 7); //vorne  R
   sendLong(mmTOsteps(targetbackline_steps  - currbackline_steps ,0),4, 7); //hinten R
-    state = 1;
+    hoehe_mm = tempHeight;
+    tiefe_mm = tempDepth;
+    state = 0;
     menu = 99;
     animation();
   }
