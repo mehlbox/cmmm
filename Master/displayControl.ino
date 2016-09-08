@@ -47,14 +47,24 @@ void LCDbackground() {
   }
 }
 
-void checkMenuButtons(int* buttonCalc, int menuAction, int menuEnter, byte menuEnterReset) {
-    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    *buttonCalc++; menu = menuAction; }
-    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  *buttonCalc--; menu = menuAction; }
-    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); *buttonCalc = *buttonCalc + 10; menu = menuAction; }
-    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  *buttonCalc = *buttonCalc - 10; menu = menuAction; }
+void checkButtonsInt(unsigned int* buttonCalc, byte menuAction, byte menuEnter, byte menuEnterReset) {
+    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    *buttonCalc = *buttonCalc + 1 ; menu = menuAction; }
+    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  *buttonCalc = *buttonCalc - 1 ; menu = menuAction; }
+    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); *buttonCalc = *buttonCalc - 10; menu = menuAction; }
+    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  *buttonCalc = *buttonCalc + 10; menu = menuAction; }
     if (LCDMenuLib_checkButtonEnter()) {
       menu = menuEnter;
       if (menuEnterReset) LCDMenuLib_resetButtonEnter();
       }
 }
 
+void checkButtonsLong(unsigned long* buttonCalc, byte menuAction, byte menuEnter, byte menuEnterReset) {
+    if (LCDMenuLib_checkButtonUp())    { LCDMenuLib_resetButtonUp();    *buttonCalc = *buttonCalc + 1 ; menu = menuAction; }
+    if (LCDMenuLib_checkButtonDown())  { LCDMenuLib_resetButtonDown();  *buttonCalc = *buttonCalc - 1 ; menu = menuAction; }
+    if (LCDMenuLib_checkButtonRight()) { LCDMenuLib_resetButtonRight(); *buttonCalc = *buttonCalc / 10; menu = menuAction; }
+    if (LCDMenuLib_checkButtonLeft())  { LCDMenuLib_resetButtonLeft();  *buttonCalc = *buttonCalc * 10; menu = menuAction; }
+    if (LCDMenuLib_checkButtonEnter()) {
+      menu = menuEnter;
+      if (menuEnterReset) LCDMenuLib_resetButtonEnter();
+      }
+}
