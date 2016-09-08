@@ -511,7 +511,7 @@ void FUNC_motoren(void)
   }
 
   if (menu == 3) {
-    lcd.setCursor(10,1); lcdPrintNR(motorSpeed_neu); lcd.print(" ");
+    lcd.setCursor(10,1); lcdPrintNR(motorSpeed_neu); lcd.print(F(" "));
     menu = 5;
   }
 
@@ -530,7 +530,7 @@ void FUNC_motoren(void)
   }
 
   if (menu == 6) {
-    lcd.setCursor(30,0); lcdPrintNR(expo(2,gear_neu)); lcd.print(" ");
+    lcd.setCursor(30,0); lcdPrintNR(expo(2,gear_neu)); lcd.print(F(" "));
     menu = 8;
   }
 
