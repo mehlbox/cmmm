@@ -210,8 +210,8 @@ void loop() {
   if(!digitalRead(_lockPin) && lastLockState == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
     checkError();
     lastLockState = 0;
-    hoehe_mm = load(100);   // Höhe Slot 100
-    tiefe_mm = load(1+128); // Tiefe Slot 1
+    hoehe_mm = load(1);     // Slot 1 als Standart laden
+    tiefe_mm = load(1+128); // Slot 1 als Standart laden
     checkLimits(&hoehe_mm, &tiefe_mm);
     state = 1;
     fadeState = false;
@@ -222,7 +222,7 @@ void loop() {
     checkError();
   }
   
-  if(digitalRead(_lockPin) && lastLockState == 0) { // Mischpult eingeschaltet.. letzte Position laden
+  if(digitalRead(_lockPin) && lastLockState == 0) { // Mischpult eingeschaltet.. Slot 1 laden
     checkError();
     lastLockState = 1;
     hoehe_mm = load(1);     // Slot 1 als Standart laden
