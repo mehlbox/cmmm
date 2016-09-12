@@ -128,8 +128,10 @@ void setup()
 void loop() {
   wdt_reset();
   static unsigned long runMillis, sleepMillis, i2cMillis, previousCursorMillis; // Timer Variablen
-  LCDMenuLib_control_analog();        /* lcd menu control - config in tab "LCDML_control" */ 
-  LCDMenuLib_loop();                  /* lcd function call */
+  if (digitalRead(_lockPin)) { //KEY LOCK
+    LCDMenuLib_control_analog();        /* lcd menu control - config in tab "LCDML_control" */ 
+    LCDMenuLib_loop();                  /* lcd function call */
+  }
   LCDbackground();                    /* lcd background light */
 
   if(millis() - previousCursorMillis >= 750) { // Blinkender Cursor wenn nicht im Menü
@@ -218,7 +220,9 @@ void loop() {
   }
   
   if(state == 4 && fadeValue == 0) { // nicht wieder aufwachen wenn Mischpult aus
-    while(!digitalRead(_lockPin)); // watchdog will take over
+    wdt_disable();
+    while(!digitalRead(_lockPin)); // sleep
+    wdt_enable(WDTO_4S);
   }
   
   if(digitalRead(_lockPin) && lastLockState == 0) { // Mischpult eingeschaltet.. Slot 1 laden
