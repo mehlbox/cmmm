@@ -197,7 +197,8 @@ void FUNC_speichern(void) {
   }
 }
 
-void FUNC_zeigenSchnur(void) { 
+void FUNC_zeigenSchnur(void)
+{ 
   static unsigned long timer;
   static byte unit, addr; // 0 = schritte, 1 = mm
   if (addr == 0) addr = 11;
@@ -275,13 +276,13 @@ static unsigned long timer;
   LCDML.FuncEnd(0, 1, 0, 0, 0, 0); // (direct, enter, up, down, left, right)     
 }
 
-void FUNC_motorStop(void) {
+void FUNC_motorStop(void){
       Wire.beginTransmission(0);
       Wire.write(0);
       Wire.endTransmission();
 }
 
-void FUNC_back(void) {
+void FUNC_back(void){
   LCDML.FuncInit();            // setup function 
   LCDML.Button_quit(2);        // quit button   
   LCDML.FuncEnd(1,0,0,0,0,0);  // direct func end
