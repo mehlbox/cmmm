@@ -210,7 +210,7 @@ void loop() {
   if(!digitalRead(_lockPin) && lastLockState == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
     checkError();
     lastLockState = 0;
-    hoehe_mm = load(1);     // Slot 1 als Standart laden
+    hoehe_mm = load(100);   // Slot 100 als Standart laden
     tiefe_mm = load(1+128); // Slot 1 als Standart laden
     checkLimits(&hoehe_mm, &tiefe_mm);
     state = 1;

@@ -10,6 +10,7 @@ void nameSlot(int temp_slot) {
     case 7 : lcd.print(F("Streichorchester ")); break;
     case 8 : lcd.print(F("Sinfonieorchester")); break;
     case 9 : lcd.print(F("Vororchester     ")); break;
+    case 100:lcd.print(F("Parkposition     ")); break;
     default: lcd.print(F("                 ")); break;
   }
 }
