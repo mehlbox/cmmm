@@ -10,6 +10,7 @@
 #include <LiquidCrystal.h>
 #include <LCDMenuLib.h>
 #include <EEPROM.h>
+#include <avr/wdt.h>
 
 /* display dimension */
 #define _LCDMenuLib_LCD_cols             20
@@ -105,6 +106,7 @@ void setup()
 { 
   pinMode(_lockPin, INPUT); digitalWrite(_lockPin, HIGH); // für die Abfrage ob Mischpult aus
   while(!digitalRead(_lockPin)); // nicht aufwachen wenn Mischpult aus
+  wdt_enable(WDTO_4S);
   LCDMenuLib_setup(_LCDMenuLib_cnt);  /* Setup for LcdMenuLib */
   Wire.begin(); // start up i2c bus
   TWBR = 158; TWSR |= bit(TWPS0); // slow down bus clock
@@ -124,6 +126,7 @@ void setup()
 }
 
 void loop() {
+  wdt_reset();
   static unsigned long runMillis, sleepMillis, i2cMillis, previousCursorMillis; // Timer Variablen
   LCDMenuLib_control_analog();        /* lcd menu control - config in tab "LCDML_control" */ 
   LCDMenuLib_loop();                  /* lcd function call */
@@ -141,7 +144,6 @@ void loop() {
   }
 
   if (state == 0) { // initialisierung - letzte Position laden
-    checkError();
     hoehe_mm = load(0);
     tiefe_mm = load(0+128);
     gesamtbreite = load(101);
@@ -198,7 +200,6 @@ void loop() {
    }
   
   if(state == 3 && millis() - sleepMillis >= 1000) { // abwarten nach Position erreicht - fertig
-    checkError();
     state = 4;
   }
   
@@ -208,7 +209,6 @@ void loop() {
   }
   
   if(!digitalRead(_lockPin) && lastLockState == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
-    checkError();
     lastLockState = 0;
     hoehe_mm = load(100);   // Slot 100 als Standart laden
     tiefe_mm = load(1+128); // Slot 1 als Standart laden
@@ -217,13 +217,11 @@ void loop() {
     fadeState = false;
   }
   
-  if(state == 4 && fadeValue == 0) {
-    while(!digitalRead(_lockPin)); // nicht wieder aufwachen wenn Mischpult aus
-    checkError();
+  if(state == 4 && fadeValue == 0) { // nicht wieder aufwachen wenn Mischpult aus
+    while(!digitalRead(_lockPin)); // watchdog will take over
   }
   
   if(digitalRead(_lockPin) && lastLockState == 0) { // Mischpult eingeschaltet.. Slot 1 laden
-    checkError();
     lastLockState = 1;
     hoehe_mm = load(1);     // Slot 1 als Standart laden
     tiefe_mm = load(1+128); // Slot 1 als Standart laden

@@ -119,7 +119,6 @@ void sendLong(long senddata, byte motor, byte action) { // Long Wert senden
 }
 
 void checkError() { //selbstdiagnose
-  byte fehler;
   int stat1, stat3, span1, span3;
   static unsigned long errorMillis;
   if (demo == false) { //keine Fehler im Demo prüfen.
@@ -128,15 +127,13 @@ void checkError() { //selbstdiagnose
     span1 = spannung(1);
     span3 = spannung(3);
     if (stat1 == '#' || stat3 == '#' || span1 < 8 || span3 < 8) { // Angabe Spannung in Volt
-      fehler = true;
       lcd.noCursor();
       lcd.clear();
       lcd.setCursor(0,0); lcd.print(F("Fehler!!!"));
       lcd.setCursor(8,1); lcd.print(F("Links Rechts"));
       digitalWrite(_lightPin, HIGH);
-      while(fehler) {
-        if (stat1 != '#' && stat3 != '#' && span1 >= 9 && span3 >= 9) { fehler = false; FUNC_back(); } // Fehler behoben
-        if (millis() >= errorMillis && fehler == true) {
+      while(true) { // watchdog will get you out of here
+        if (millis() >= errorMillis) {
           Wire.beginTransmission(0); Wire.write(0); Wire.endTransmission(); // alle noch erreichbaren Motoren anhalten
           errorMillis = millis() + 100;
           stat1 = motorstatus(1);
