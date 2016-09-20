@@ -26,4 +26,4 @@ Slave unit: (2x)
 
 ##ToDo
 - new button debounce fuction
-- standart slots with names
+- standart slots with names - check, not tested

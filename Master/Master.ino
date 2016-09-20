@@ -10,6 +10,7 @@
 #include <LiquidCrystal.h>
 #include <LCDMenuLib.h>
 #include <EEPROM.h>
+#include <avr/wdt.h>
 
 /* display dimension */
 #define _LCDMenuLib_LCD_cols             20
@@ -62,11 +63,11 @@ LCDMenuLib_add(4 , root         , 5  , "Motor Stop !!"      , FUNC_motorStop);
 LCDMenuLib_add(5 , root         , 6  , "Status"             , FUNC_status);
 LCDMenuLib_add(6 , root         , 7  , "Zeige Schnurl\341nge",FUNC_zeigenSchnur);
 LCDMenuLib_add(7 , root         , 8  , "Admin Funktionen"   , FUNC_Admin);
-LCDMenuLib_add(8 , root_8       , 1  , "Abweichung Schnur" ,  FUNC_abweichnung);
+LCDMenuLib_add(8 , root_8       , 1  , "Abweichung Schnur"  , FUNC_abweichnung_schnur);
 LCDMenuLib_add(9 , root_8       , 2  , "Zeige Schnurl\341nge",FUNC_zeigenSchnur);
 LCDMenuLib_add(10, root_8       , 3  , "Drehrichtung"      , FUNC_drehrichtung);
 LCDMenuLib_add(11, root_8       , 4  , "Aktionsbereich"    , FUNC_bereich);
-LCDMenuLib_add(12, root_8       , 5  , "MinMax Werte"    , FUNC_MinMax);
+LCDMenuLib_add(12, root_8       , 5  , "MinMax Werte"      , FUNC_MinMax);
 LCDMenuLib_add(13, root_8       , 6  , "Spulen"            , FUNC_Spule);
 LCDMenuLib_add(14, root_8       , 7  , "Motoren"           , FUNC_motoren);
 LCDMenuLib_add(15, root_8       , 8  , "Speicher auslesen" , FUNC_speicherLesen);
@@ -105,6 +106,7 @@ void setup()
 { 
   pinMode(_lockPin, INPUT); digitalWrite(_lockPin, HIGH); // für die Abfrage ob Mischpult aus
   while(!digitalRead(_lockPin)); // nicht aufwachen wenn Mischpult aus
+  wdt_enable(WDTO_4S);
   LCDMenuLib_setup(_LCDMenuLib_cnt);  /* Setup for LcdMenuLib */
   Wire.begin(); // start up i2c bus
   TWBR = 158; TWSR |= bit(TWPS0); // slow down bus clock
@@ -124,9 +126,12 @@ void setup()
 }
 
 void loop() {
+  wdt_reset();
   static unsigned long runMillis, sleepMillis, i2cMillis, previousCursorMillis; // Timer Variablen
-  LCDMenuLib_control_analog();        /* lcd menu control - config in tab "LCDML_control" */ 
-  LCDMenuLib_loop();                  /* lcd function call */
+  if (digitalRead(_lockPin)) { //KEY LOCK
+    LCDMenuLib_control_analog();        /* lcd menu control - config in tab "LCDML_control" */ 
+    LCDMenuLib_loop();                  /* lcd function call */
+  }
   LCDbackground();                    /* lcd background light */
 
   if(millis() - previousCursorMillis >= 750) { // Blinkender Cursor wenn nicht im Menü
@@ -141,7 +146,6 @@ void loop() {
   }
 
   if (state == 0) { // initialisierung - letzte Position laden
-    checkError();
     hoehe_mm = load(0);
     tiefe_mm = load(0+128);
     gesamtbreite = load(101);
@@ -151,14 +155,7 @@ void loop() {
     minhoehe = load(105);
     maxtiefe  = load(106);
     mintiefe  = load(107);
-
-    if (hoehe_mm == -1) hoehe_mm = 2200;
-    if (tiefe_mm == -1) tiefe_mm = 5000;
-    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
-    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
-    if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
-    if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
-    
+    checkLimits(&hoehe_mm, &tiefe_mm);
     motorSpeed = load(108);
     SPULEv = load(109) * 0.001;
     SPULEh = load(110) * 0.001;
@@ -205,7 +202,6 @@ void loop() {
    }
   
   if(state == 3 && millis() - sleepMillis >= 1000) { // abwarten nach Position erreicht - fertig
-    checkError();
     state = 4;
   }
   
@@ -215,36 +211,25 @@ void loop() {
   }
   
   if(!digitalRead(_lockPin) && lastLockState == 1) { // Mischpult ausgeschaltet. Mikrofone anheben bzw. Position 100 laden.
-    checkError();
     lastLockState = 0;
-    hoehe_mm = load(100);   // Höhe Slot 100
-    tiefe_mm = load(1+128); // Tiefe Slot 1
-    if (hoehe_mm == -1) hoehe_mm = 3200;
-    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
-    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
-    if (tiefe_mm == -1) tiefe_mm = 5800;
-    if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
-    if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
+    hoehe_mm = load(100);   // Slot 100 als Standart laden
+    tiefe_mm = load(1+128); // Slot 1 als Standart laden
+    checkLimits(&hoehe_mm, &tiefe_mm);
     state = 1;
     fadeState = false;
   }
   
-  if(state == 4 && fadeValue == 0) {
-    while(!digitalRead(_lockPin)); // nicht wieder aufwachen wenn Mischpult aus
-    checkError();
+  if(state == 4 && fadeValue == 0) { // nicht wieder aufwachen wenn Mischpult aus
+    wdt_disable();
+    while(!digitalRead(_lockPin)); // sleep
+    wdt_enable(WDTO_4S);
   }
   
-  if(digitalRead(_lockPin) && lastLockState == 0) { // Mischpult eingeschaltet.. letzte Position laden
-    checkError();
+  if(digitalRead(_lockPin) && lastLockState == 0) { // Mischpult eingeschaltet.. Slot 1 laden
     lastLockState = 1;
     hoehe_mm = load(1);     // Slot 1 als Standart laden
     tiefe_mm = load(1+128); // Slot 1 als Standart laden
-    if (hoehe_mm == -1) hoehe_mm = 2200;
-    if (hoehe_mm > maxhoehe) hoehe_mm = maxhoehe;
-    if (hoehe_mm < minhoehe) hoehe_mm = minhoehe;
-    if (tiefe_mm == -1) tiefe_mm = 5800;
-    if (tiefe_mm > maxtiefe) tiefe_mm = maxtiefe;
-    if (tiefe_mm < mintiefe) tiefe_mm = mintiefe;
+    checkLimits(&hoehe_mm, &tiefe_mm);
     state = 1;
     FUNC_back(); // Menü neu aufbauen.
     fadeState = true;
