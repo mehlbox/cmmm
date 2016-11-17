@@ -15,11 +15,11 @@ The coordinates are height and depth from stage edge. Input your desired coordin
 
 ## Hardware
 Master unit:
-- Arduino ATmega328P or clone
+- Arduino uno or clone (ATmega328P)
 - 20X4 LCD display module with HD44780 controller
 - Buttons: left, right, up, down, esc, enter
 
 Slave unit: (2x)
-- Arduino ATmega328P or clone
-- A4988 or compatible stepper motor driver (2x)
-- Stepper motor with gear (2x)
+- Arduino uno or clone (ATmega328P)
+- A4988 or compatible stepper motor driver (2x each, total 4x)
+- Stepper motor with gear (2x each, total 4x)
