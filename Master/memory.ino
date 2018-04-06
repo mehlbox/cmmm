@@ -11,24 +11,26 @@ Für die restlichen Speicherplätze siehe funktion newHardware()
 */
 
 void newHardware() {
-  save(0,   2200); // Aktuelle Position
-  save(128, 5000); // Aktuelle Position
-  save(101, 4600); // gesamtbreite
-  save(102, 7300); // gesamttiefe
-  save(103, 5800); // gesamthoehe
-  save(104, 3500); // maxhoehe
-  save(105, 2000); // minhoehe
-  save(106, 7300); // maxraumtiefe
-  save(107, 2000); // minraumtiefe
-  save(108,  800);  // Geschwindigkeit 
-  save(109, 30000);// Spulendurchmesser vorne
-  save(110,150000);// Spulendurchmesser hinten
-  save(120,     1);// Aktuelle gewählter Slot / newHardware() wird ausgeführt wenn leer
-  EEPROM.write(1022,27); // Ratio. Teil von Slot 255  Planetgetriebe auf Motor montiert...
-  EEPROM.write(1023, 1); // Gang.  Teil von Slot 255  Gang 1,2,4 volle, halbe, viertel Schritte. Leiser aber auch schwächer...
+  if (DEBUG) Serial.println("newHardware has been called !!!");
+  save(0,   2200);    // Aktuelle Position
+  save(0+128, 5000);  // Aktuelle Position
+  save(101, 7300);    // dimension_x
+  save(102, 5800);    // dimension_y
+  save(103, 4600);    // dimension_z
+  save(104, 2000);    // range_x_min
+  save(104+128, 7300);// range_x_max
+  save(105, 2000);    // range_y_min
+  save(105+128, 3500);// range_y_max
+  save(108,  800);    // maximale Geschwindigkeit in Schritte pro ???
+  save(109, 30000);   // Spulendurchmesser vorne in µm
+  save(110,150000);   // Spulendurchmesser hinten in µm
+  save(120,     1);   // Aktuelle gewählter Slot / newHardware() wird ausgeführt wenn leer
+  EEPROM.write(1022,27); // gearRatio. Teil von Slot 255  Planetgetriebe auf Motor montiert...
+  EEPROM.write(1023, 1); // stepping.  Teil von Slot 255.  stepping 1,2,4 volle, halbe, viertel Schritte. Leiser aber auch schwächer...
 }
 
-void save(int slot, long data) { // Position in EEPROM Speichern
+void save(int slot, unsigned long data) { // Position in EEPROM Speichern
+  if (data != load(slot)) {
     byte mem[4];
     slot = (slot * 4); // Adresse verschieben
     mem[0]=(data      ) & 0xFF;
@@ -36,9 +38,10 @@ void save(int slot, long data) { // Position in EEPROM Speichern
     mem[2]=(data >> 16) & 0xFF;
     mem[3]=(data >> 24) & 0xFF;
     for (int n=0; n<=3;n++) EEPROM.write(slot+n, mem[n]);
+  }
 }
 
-long load(int slot) {    //Position aus EEPROM laden
+unsigned long load(int slot) {    //Position aus EEPROM laden
   slot = (slot * 4); // Adresse verschieben
   long mem[4];
   mem[0] = EEPROM.read(slot);
@@ -48,4 +51,8 @@ long load(int slot) {    //Position aus EEPROM laden
   return (mem[0] |= mem[1] |= mem[2] |= mem[3]);
 }
 
-
+void clearEEPROM() {
+  for (int i = 0 ; i < EEPROM.length() ; i++) {
+    if (EEPROM.read(i) != 255) EEPROM.write(i, 255);
+  }
+}

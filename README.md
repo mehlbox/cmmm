@@ -1,25 +1,38 @@
-# CMMM
+# CMMM2
 ceiling mounted motorized microphone
+
+## The development for this project is ceased. Use the original repository instead.
+
+Due to network performance issue I chose to cease this version. It will rest here for documentary purpose. Next version will be developed on a raspberry pi.
 
 This Arduino based project controls one set of microphone (in my case one ORTF set) to move it around just like a spider cam.
 
-- using https://github.com/Jomelo/LCDMenuLib for display control
-- using http://www.airspayce.com/mikem/arduino/AccelStepper/index.html for motor control
-
-There are one master unit and two slave units where the master is equipped with a display and keys for input. Master and slave are connectet via i2c. Each slave unit controlls two stepper motor (4 stepper motor in total).
-The coordinates are height and depth from stage edge. Input your desired coordinates on the master unit and it will calculate the length of the lines and send it to the slave units.
-
-- Use 1k pullup resisrtor for i2c bus to achieve long wiring. I get about 50m bus lengh with 1k pull up on a simple telephon wire.
-
-- Use master branch for a working version. It is usable exept some cosmetic bugs on control panel.
+There are one master unit and two slave units. Master and slave are connectet via I2C. Each slave unit controlls two stepper motor (4 stepper motor in total).
+The coordinates are height and depth from stage edge. Input your desired coordinates on the web interface and it will calculate the length of the lines and send it to the slave units.
+- connect devices via I2C
+- use the P82B715 I2C Bus Extender to achieve long wiring
+- control settings via the web interface on your smartphone
 
 ## Hardware
+
 Master unit:
-- Arduino uno or clone (ATmega328P)
-- 20X4 LCD display module with HD44780 controller
-- Buttons: left, right, up, down, esc, enter
+- Arduino Mega or clone (ATmega2560)
+- Ethernet shield (W5100)
 
 Slave unit: (2x)
-- Arduino uno or clone (ATmega328P)
+- Arduino pro mini ATmega328P)
+- CNC Shield V4
 - A4988 or compatible stepper motor driver (2x each, total 4x)
 - Stepper motor with gear (2x each, total 4x)
+
+AccelStepper library for Arduino is being used for motor control
+http://www.airspayce.com/mikem/arduino/AccelStepper/
+
+
+
+
+
+
+
+
+

@@ -1,33 +1,37 @@
 void checkLimits(unsigned long* tempHeight, unsigned long* tempDepth) {
-  if (*tempHeight == -1) *tempHeight = 2200;
-  if (*tempDepth == -1) *tempDepth = 5800;
-  
-  if (*tempHeight > maxhoehe) *tempHeight = maxhoehe;
-  if (*tempHeight < minhoehe) *tempHeight = minhoehe;
+  if (*tempHeight == -1) *tempHeight = range_y_max / 2;
+  if (*tempDepth == -1) *tempDepth = range_x_max / 2;
 
-  if (*tempDepth > maxtiefe) *tempDepth = maxtiefe;
-  if (*tempDepth < mintiefe) *tempDepth = mintiefe;
+  if (*tempHeight > range_y_max) *tempHeight = range_y_max;
+  if (*tempHeight < range_y_min) *tempHeight = range_y_min;
+
+  if (*tempDepth > range_x_max) *tempDepth = range_x_max;
+  if (*tempDepth < range_x_min) *tempDepth = range_x_min;
 }
 
 int caladdr(byte motor) { // Adresse berechnen
-  if ( motor == 0) return 0; // broadcast
-  if ( motor == 1) return 11;
-  if ( motor == 2) return 11;
-  if ( motor == 3) return 12;
-  if ( motor == 4) return 12;
+  int value = 99;
+  if ( motor == 0) value = 0; // broadcast
+  if ( motor == 1) value = 11; // left
+  if ( motor == 2) value = 11; // left
+  if ( motor == 3) value = 12; // right
+  if ( motor == 4) value = 12; // right
+  return value;
 }
 
 byte calmotor(byte motor) { // Motor berechnen
-  if ( motor == 1) return 1;
-  if ( motor == 2) return 2;
-  if ( motor == 3) return 1;
-  if ( motor == 4) return 2;
+  byte value = 99;
+  if ( motor == 1) value = 1; // front
+  if ( motor == 2) value = 2; // back
+  if ( motor == 3) value = 1; // front
+  if ( motor == 4) value = 2; // back
+  return value;
 }
 
 unsigned long mmTOsteps(float mm, byte voh) { // umrechnung //vorne oder hinten
   static float x, SPULE;
-  if (voh) SPULE = SPULEv; else SPULE = SPULEh;
-  x = mm / (SPULE * 3.141592 / 200) * ratio * gang;
+  if (voh) SPULE = spool_front; else SPULE = spool_back;
+  x = mm / (SPULE/1000 * 3.141592 / 200) * gearRatio * stepping;
   if (isnan(x)) x = 0; // Not a number
   x = x + 0.5; // weil bei float in long immer abgerundet wird
   return x;
@@ -35,10 +39,19 @@ unsigned long mmTOsteps(float mm, byte voh) { // umrechnung //vorne oder hinten
 
 unsigned long stepsTOmm(unsigned long steps, byte voh) { // umrechnung
   static float x, SPULE;
-  if (voh) SPULE = SPULEv; else SPULE = SPULEh;
-  x = steps * (SPULE * 3.141592 / 200) / ratio / gang;
+  if (voh) SPULE = spool_front; else SPULE = spool_back;
+  x = steps * SPULE/1000 * 3.141592 / 200 / gearRatio / stepping;
   if (isnan(x)) x = 0; // Not a number
   x = x + 0.5; // weil bei float in long immer abgerundet wird
+  return x;
+}
+
+long stepsTOmmS(long steps, byte voh) { // umrechnung SIGNED (minus)
+  long x, SPULE;
+  if (voh) SPULE = spool_front; else SPULE = spool_back;
+  x = steps * SPULE/1000 * 3.141592 / 200 / gearRatio / stepping;
+  if (isnan(x)) x = 0; // Not a number
+  //x = x + 0.5; // weil bei float in long immer abgerundet wird
   return x;
 }
 
@@ -54,7 +67,7 @@ int expo(int m, int n) {  // berechnet m hoch n
 //  # Berechnungen werden in float durchgeführt und danach durch einsetzen in long Variable gerundet! #
 //  ###################################################################################################
 
-unsigned long CoordinateTOline(float F_hoehe_mm, float F_tiefe_mm) { // Umrechnung von Koordinaten auf Schnurlänge in mm (Zielwerte)
+void CoordinateTOline(float F_height_mm, float F_depth_mm) { // Umrechnung von Koordinaten auf Schnurlänge in mm (Zielwerte)
 //
 //      a       b(tiefe)
 //   +-----+---------------+
@@ -62,7 +75,7 @@ unsigned long CoordinateTOline(float F_hoehe_mm, float F_tiefe_mm) { // Umrechnu
 //     \   |h        /
 //    c \  |      / d
 //       \ |   /
-//         + 
+//         +
 //
 //--------------------------+    Kante Bühne = nullpunkt
 //                          |
@@ -70,19 +83,19 @@ unsigned long CoordinateTOline(float F_hoehe_mm, float F_tiefe_mm) { // Umrechnu
 //   Schnur --> c und d
 //   Decke  --> a und b
   static float a, b, c, d, h, w;
-  w = gesamtbreite * 0.5; 
-  h = gesamthoehe - F_hoehe_mm;   // Abstand vom Boden
-  a = gesamttiefe - F_tiefe_mm;   // Abstand von der Wand
+  w = dimension_z * 0.5;
+  h = dimension_y - F_height_mm;  // Abstand vom Boden
+  a = dimension_x - F_depth_mm;   // Abstand von der Wand
   c = sqrt(sq(a)+sq(h)+sq(w));
   targetbackline_mm = c + 0.5; // weil bei float in long immer abgerundet wird
-  b = gesamttiefe - a;
+  b = dimension_x - a;
   d = sqrt(sq(b)+sq(h)+sq(w)); // Inhalt der Wurzel
   targetfrontline_mm = d + 0.5; // weil bei float in long immer abgerundet wird
-  
+
   targetfrontline_steps = mmTOsteps(targetfrontline_mm,1);
   targetbackline_steps  = mmTOsteps(targetbackline_mm,0);
 }
 
 // 200 Schritte pro Umdrehung
-// ratio = 27 Getriebe (untersetzung) auf Motor
+// gearRatio = 27 Getriebe (untersetzung) auf Motor
 // SPULE Durchmesser

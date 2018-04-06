@@ -1,0 +1,341 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+  <title>ceiling mounted motorized microphone</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css">
+<style>
+	#position_area	{ width: 90vw; height: 60vw; border: solid 0.2vw gray; border-bottom: solid 3vw gray; margin: 0 4vw; background-color:rgba(255,255,224, 1);}
+	.ui-header	{ height: 2.5em; }
+	#admin			{ display: none; }
+	.fine_box		{ padding: 0.3em; }
+  code        { white-space: pre-wrap; }
+  body 			{
+		overscroll-behavior: none;
+		/*touch-action: none;*/
+		/*scrollView.bounces = false;*/
+	}
+  #infoBoxSet   { display: none; color: gray;}
+	.infoBox			{ font-size: 1em; padding: 0.5em;}
+  /* admin menu */
+  .ui-collapsible-content {
+    padding: 0;
+  }
+  .ui-collapsible-heading, .ui-collapsible-heading>.ui-btn {
+    -webkit-border-radius: none;
+    border-radius: none;
+  }
+  .indexListTop {border-top: 0.2em solid #ccffcc;}
+</style>
+  <!--script src="jquery/jquery-2.2.4.min.js"></script-->
+  <script src="jquery/jquery-2.1.4.min.js"></script>
+  <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+  <script src="js/index-function.js"></script>
+  <script src="js/admin-function.js"></script>
+</head>
+<body>
+<div data-role="page">
+	<div data-role="header">
+		<div class="infoBox" id="infoBoxCurrent">Höhe: <span id="y_num_current"></span> - Tiefe: <span id="x_num_current"></span></div>
+    <div class="infoBox" id="infoBoxSet">Höhe: <span id="y_num_set"></span> - Tiefe: <span id="x_num_set"></span></div>
+			<div class="ui-btn-right fine_box">
+				<select name="fine" id="fine" data-role="flipswitch" data-inline="true">
+					<option value="coarse">grob</option>
+					<option value="fine">fein</option>
+				</select>
+			</div>
+	</div><!--header-->
+	<div id="position_area">
+		<svg id="svg" viewBox="0 0 599 399">
+			<polygon  points="0,360 140,360 140,380 200,380 200,400 0,400" style="fill:gray;" />
+			<rect id="range" x="0" y="0" width="0" height="0" style="fill:green;opacity:0.2;stroke:red;stroke-width:3;;opacity:0.2" />
+			<polyline id="set-line1"     points="0,0 0,0" style="fill:none;stroke:gray; stroke-width:2;" stroke-dasharray="5, 5"/>
+			<polyline id="set-line2"     points="0,0 0,0" style="fill:none;stroke:gray; stroke-width:2;" stroke-dasharray="5, 5"/>
+			<circle id="set-mic" cx="0" cy="0" r="8" fill="gray" />
+			<polyline id="target-line1"  points="0,0 0,0" style="fill:none;stroke:green;stroke-width:2;" stroke-dasharray="5, 5"/>
+			<polyline id="target-line2"  points="0,0 0,0" style="fill:none;stroke:green;stroke-width:2;" stroke-dasharray="5, 5"/>
+			<circle id="target-mic" cx="0" cy="0" r="8" fill="green" />
+			<polyline id="current-line1" points="0,0 0,0" style="fill:none;stroke:black;stroke-width:2;" />
+			<polyline id="current-line2" points="0,0 0,0" style="fill:none;stroke:black;stroke-width:2;" />
+			<circle id="current-mic" cx="0" cy="0" r="8" fill="black" />
+		</svg>
+	</div><!--position_area-->
+  <div>
+  	<fieldset class="ui-grid-a">
+  		<div class="ui-block-a"><a href="#" id="stop" class="ui-btn ui-shadow ui-corner-all ui-icon-alert ui-btn-icon-left">Stop</a></div>
+  		<div class="ui-block-b"><a href="#" id="send" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left loading-icon">Start</a></div>
+  	</fieldset>
+  </div>
+  <div data-role="collapsible" data-mini="true" data-theme="b" data-content-theme="b" id="admin">
+	<h3>Admin Area</h3>
+    <div data-role="tabs">
+      <div data-role="navbar">
+        <ul>
+          <li><a href="#area" class="ui-btn ui-btn-active">area</a></li>
+          <li><a href="#motor" class="ui-btn">motor</a></li>
+          <li><a href="#line" class="ui-btn">line</a></li>
+          <li><a href="#command" class="ui-btn" id="adminCommand">command</a></li>
+        </ul>
+      </div><!--navbar-->
+      <div id="area" class="ui-content">
+  			<ul data-role="listview" data-inset="false">
+  				<li>
+            <form>
+  		        <div data-role="rangeslider">
+                <label for="range_y_min">mix max border height in mm</label>
+                <input type="range" name="range_y_min" id="range_y_min" min="0" max="0" value="0">
+                <label for="range_y_max">mix max border height in mm</label>
+                <input type="range" name="range_y_max" id="range_y_max" min="0" max="0" value="0">
+              </div>
+            </form>
+  				</li>
+  				<li>
+            <form>
+              <div data-role="rangeslider">
+                <label for="range_x_min">mix max border depth</label>
+                <input type="range" name="range_x_min" id="range_x_min" min="0" max="0" value="0">
+                <label for="range_x_max">mix max border depth</label>
+                <input type="range" name="range_x_max" id="range_x_max" min="0" max="0" value="0">
+              </div>
+            </form>
+  				</li>
+  				<li>total dimension in mm
+  					<div class="ui-grid-b">
+              <div class="ui-block-a">
+                <div class="ui-bar">
+                  <label for="dimension_y">height:</label>
+                  <input type="number" name="dimension_y" pattern="[0-9]*" id="dimension_y" value="0">
+  							</div>
+  						</div>
+              <div class="ui-block-b">
+                <div class="ui-bar">
+                  <label for="dimension_x">depth:</label>
+                  <input type="number" name="dimension_x"  pattern="[0-9]*" id="dimension_x"  value="0">
+  							</div>
+  						</div>
+              <div class="ui-block-c">
+                <div class="ui-bar">
+                  <label for="dimension_z">width:</label>
+                  <input type="number" name="dimension_z"  pattern="[0-9]*" id="dimension_z"  value="0">
+  							</div>
+  						</div>
+  					</div>
+  				</li>
+  				<li>
+  					<fieldset class="ui-grid-a">
+  						<div class="ui-block-a"><a href="#" id="area_cancel" data-role="button" data-icon="delete">Cancel</a></div>
+  						<div class="ui-block-b"><a href="#" id="area_send"   data-role="button" data-icon="check" >Submit</a></div>
+  					</fieldset>
+  				</li>
+  			</ul>
+      </div><!--area-->
+      <div id="motor" class="ui-content">
+        <ul data-role="listview" data-inset="false">
+          <li>spool size in mm
+            <div class="ui-grid-a">
+              <div class="ui-block-a">
+                <div class="ui-bar">
+                  <label for="spool_front">front:</label>
+                  <input type="number" name="spool_front" pattern="[0-9]*" id="spool_front" value="0">
+                </div>
+              </div>
+              <div class="ui-block-b">
+                <div class="ui-bar">
+                  <label for="spool_back">back:</label>
+                  <input type="number" name="spool_back"  pattern="[0-9]*" id="spool_back"  value="0">
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>attributes
+            <div class="ui-grid-b">
+              <div class="ui-block-a">
+                <div class="ui-bar">
+                  <label for="motorSpeedLimit">speed limit:</label>
+                  <input type="number" name="motorSpeedLimit" pattern="[0-9]*" id="motorSpeedLimit" value="0">
+                </div>
+              </div>
+              <div class="ui-block-b">
+                <div class="ui-bar">
+                  <label for="stepping">stepping:</label>
+                  <input type="number" name="stepping"  pattern="[0-9]*" id="stepping"  value="0">
+                </div>
+              </div>
+              <div class="ui-block-c">
+                <div class="ui-bar">
+                  <label for="spool_back">gear ratio:</label>
+                  <input type="number" name="gearRatio"  pattern="[0-9]*" id="gearRatio"  value="0">
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>rotational direction
+            <div class="ui-grid-a">
+              <div class="ui-block-a">
+                <div class="ui-bar">
+                  <label for="invert_back_left">back left:</label>
+                  <input type="button" name="invert_back_left" id="invert_back_left" value="invert">
+                </div>
+              </div>
+              <div class="ui-block-b">
+                <div class="ui-bar">
+                  <label for="invert_back_right">back right:</label>
+                  <input type="button" name="invert_back_right" id="invert_back_right" value="invert">
+                </div>
+              </div>
+              <div class="ui-block-a">
+                <div class="ui-bar">
+                  <label for="invert_front_left">front left:</label>
+                  <input type="button" name="invert_front_left" id="invert_front_left" value="invert">
+                </div>
+              </div>
+              <div class="ui-block-b">
+                <div class="ui-bar">
+                  <label for="invert_front_right">front right:</label>
+                  <input type="button" name="invert_front_right" id="invert_front_right" value="invert">
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <fieldset class="ui-grid-a">
+              <div class="ui-block-a"><a href="#" id="option_cancel" data-role="button" data-icon="delete">Cancel</a></div>
+              <div class="ui-block-b"><a href="#" id="option_send"   data-role="button" data-icon="check" >Submit</a></div>
+            </fieldset>
+          </li>
+        </ul>
+      </div><!--motor-->
+      <div id="line" class="ui-content">
+        <ul data-role="listview" data-inset="false">
+          <li class="ui-body"><h3>line lengh:</h3>
+            <div class="ui-grid-a ui-body-a">
+              <div class="ui-block-a"><div class="ui-bar ui-bar-b">millimeter:</div></div>
+              <div class="ui-block-b"><div class="ui-bar ui-bar-b">steps:</div></div>
+              <div class="ui-block-a"><div class="ui-bar ui-bar-a">front:</div></div>
+              <div class="ui-block-b"><div class="ui-bar ui-bar-a">front:</div></div>
+              <div class="ui-block-a"><div class="ui-bar ui-body-a" id="front-cm"></div></div>
+              <div class="ui-block-b"><div class="ui-bar ui-body-a" id="front-steps"></div></div>
+              <div class="ui-block-a"><div class="ui-bar ui-bar-a">back:</div></div>
+              <div class="ui-block-b"><div class="ui-bar ui-bar-a">back:</div></div>
+              <div class="ui-block-a"><div class="ui-bar ui-body-a" id="back-cm"></div></div>
+              <div class="ui-block-b"><div class="ui-bar ui-body-a" id="back-steps"></div></div>
+              <div class="ui-block-a"><div class="ui-bar ui-body-c"></div></div>
+              <div class="ui-block-b"><div class="ui-bar ui-body-c"></div></div>
+            </div>
+          </li>
+          <li>
+
+          </li>
+          <li><h3>calibration:</h3>
+            <div class="ui-grid-a">
+              <div class="ui-block-a">
+                <div class="ui-bar">
+
+                </div>
+              </div>
+              <div class="ui-block-b">
+                <div class="ui-bar">
+
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <fieldset class="ui-grid-a">
+              <div class="ui-block-a"><a href="#" id="line_cancel" data-role="button" data-icon="delete">Cancel</a></div>
+              <div class="ui-block-b"><a href="#" id="line_send"   data-role="button" data-icon="check" >Submit</a></div>
+            </fieldset>
+          </li>
+        </ul>
+      </div><!--line-->
+
+      <div id="command">
+        <code id="adminOutput"></code>
+        <div class="ui-content">
+          <ul data-role="listview" data-inset="false">
+            <li><a href="#" id="adminRestart" data-role="button">restart application</a></li>
+            <li><a href="#" id="adminKill" data-role="button">kill application (cron will start)</a></li>
+            <li><a href="#" id="adminReboot" data-role="button">reboot device</a></li>
+            <li><a href="#" id="adminShutdown" data-role="button">shutdown device</a></li>
+            <li><a href="#" id="adminI2Cscan" data-role="button">I2C scan</a></li>
+            <li><a href="#" id="adminReadMemory" data-role="button">read memory</a></li>
+            <li><a href="#" id="adminClearMemory" data-role="button">clear memory</a></li>
+            <li><a href="#" id="adminFactoryDefault" data-role="button">restore factory default</a></li>
+          </ul>
+        </div>
+      </div>
+    </div><!--tabs-->
+	</div><!--admin-->
+
+	<div data-role="tabs">
+		<div data-role="navbar">
+			<ul>
+			  <li><a href="#home" class="ui-btn ui-shadow ui-corner-all ui-icon-home   ui-btn-icon-left ui-btn-active" data-theme="a">Home</a></li> <!--data-ajax="false"-->
+			  <li><a href="#mem"  class="ui-btn ui-shadow ui-corner-all ui-icon-action ui-btn-icon-left" data-theme="a" id="memLoad">Laden</a></li>
+			  <li><a href="#mem"  class="ui-btn ui-shadow ui-corner-all ui-icon-edit   ui-btn-icon-left" data-theme="a" id="memSave">Speichern</a></li>
+			</ul>
+		</div><!--navbar-->
+    <br>
+  	<div id="home" class="ui-content">
+  		<ul data-role="listview">
+        <li>Eingabe Zielposition:
+          <div class="ui-grid-a">
+            <div class="ui-block-a">
+              <div class="ui-bar">
+                <label for="directCoordinateY">Höhe:</label>
+                <input type="number" name="directCoordinateY" pattern="[0-9]*" id="directCoordinateY" value="0">
+              </div>
+            </div>
+            <div class="ui-block-b">
+              <div class="ui-bar">
+                <label for="directCoordinateX">Tiefe:</label>
+                <input type="number" name="directCoordinateX"  pattern="[0-9]*" id="directCoordinateX"  value="0">
+              </div>
+            </div>
+          </div>
+        </li>
+  		</ul>
+  	</div>
+  	<div id="mem" class="ui-content">
+      <ul data-role="listview">
+        <li class="indexListTop">
+          <a href="#" id="memIndex">selector</a>
+          <div class="ui-grid-a">
+            <div class="ui-block-a">
+              <div class="ui-bar" >Höhe:<br><span id="memIndexY"></span> cm
+              </div>
+            </div>
+            <div class="ui-block-b">
+              <div class="ui-bar">Tiefe:<br><span id="memIndexX"></span> cm
+              </div>
+            </div>
+          </div>
+          <form class="full-width-slider">
+            <input type="range" name="memIndexSlider" id="memIndexSlider" min="1" max="100" step="1" value="">
+          </form>
+          <br>
+        </li>
+      </ul>
+      <ul data-role="listview" id="memIndexList">
+      </ul>
+  	</div>
+  </div>
+
+  <div data-role="popup" id="popupDialog" style="max-width:400px;">
+      <div role="main" class="ui-content">
+          <h3 class="ui-title">Speicherplatz wird überschrieben<br> Willst du wirklich?</h3>
+          <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="back">Nein</a>
+          <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="back" id="popupConfirm">Ja</a>
+      </div>
+  </div>
+
+	<div data-role="footer" data-position="fixed" data-tap-toggle="false">ceileing mounted motorized microphone</div>
+
+</div><!--page-->
+<script src="js/index.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
