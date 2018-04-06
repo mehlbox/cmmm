@@ -1,4 +1,4 @@
-# CMMM2
+# CMMM-MC
 ceiling mounted motorized microphone
 
 ## The development for this project is ceased. Use the original repository instead.
