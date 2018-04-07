@@ -80,12 +80,6 @@ function afterLogin() {
 
 function getSettings() {
 	adminCheck();
-	var loadingTimeout = setTimeout(function() {
-                $.mobile.loading( "show", {
-                        text: "verbinden",
-                        textVisible: true
-                });
-        }, 1000);
 	$.ajax({
 		xhrFields: { withCredentials: true },
 		beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Basic ' + auth.string) },
@@ -93,7 +87,6 @@ function getSettings() {
 		timeout: 1000
 	})
 	.done(function(data) {
-		clearTimeout(loadingTimeout);
 		errorCount = 0;
 		$.mobile.loading( "hide" );
 		if (auth.un != "admin") {
@@ -120,7 +113,6 @@ function getSettings() {
 		set_lineLengh();
 	})
 	.fail(function(e) {
-		clearTimeout(loadingTimeout);
 		errorCount = errorCount + 1;
 		if (errorCount>3) {
 			var message
