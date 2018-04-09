@@ -8,7 +8,14 @@ var errorCount;
 var auth = {}
 
 $(document).ready(function() {
-	$("#popupLogin").popup("open");
+var tempAuth = getCookie("auth");
+	if (tempAuth == "") {
+		$("#popupLogin").popup("open");
+	} else {
+		auth.un = getCookie("username");
+		auth.string = tempAuth;
+		afterLogin();
+	}
 });
 
 $("#position_area")
@@ -279,7 +286,13 @@ $("#memSave").click( function() {
 });
 
 $("#reloadPage").click( function() {
-	location.reload();
+	location.reload(true);
+});
+
+$("#logout").click( function() {
+	delCookie("auth");
+	delCookie("username");
+        location.reload();
 });
 
 $("#loginSubmit").click (function() {

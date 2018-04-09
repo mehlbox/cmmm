@@ -6,18 +6,18 @@ fi
 
 if [ "$(pgrep -fl webserver.py)" == "" ]; then
 	echo "starting webserver.py"
-	cd /root/cmmm3/webserver/
+	cd /root/cmmm/webserver/
 	./webserver.py &
 fi
 
 if [ "$(pgrep -fl cmmm.py)" == "" ]; then
 	echo "starting cmmm.py"
-	cd /root/cmmm3/
+	cd /root/cmmm/
 	./cmmm.py &
 fi
 
 if [ "$(pgrep -fl autoswitch.py)" == "" ]; then
 	echo "starting autoswitch.py"
-	cd /root/cmmm3/
+	cd /root/cmmm/
 	./autoswitch.py &
 fi

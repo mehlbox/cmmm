@@ -25,6 +25,8 @@ function afterLogin() {
 		timeout: 5000
 	})
 	.done(function(data) {
+		setCookie("auth", auth.string); // next time no login
+		setCookie("username", auth.un);
 		clearTimeout(loadingTimeout);
 		$("#wrapper").show();
 		area = Object.assign(area, data.area);
@@ -439,4 +441,34 @@ function empty() {
 		textVisible: true,
 		textonly: true
 	})
+}
+
+function setCookie(cname, cvalue) {
+    var d = new Date();
+	cvalue = cvalue.replace(/;/g,"\\semi");
+    d.setTime(d.getTime() + (30*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+	var cvalue;
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+			cvalue = c.substring(name.length,c.length);
+			cvalue = cvalue.replace(/\\semi/g,";");
+            return cvalue;
+        }
+    }
+    return "";
+}
+
+function delCookie(cname) {
+    document.cookie = cname+'=; Max-Age=-99999999;';
 }
