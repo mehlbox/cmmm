@@ -64,6 +64,8 @@ function afterLogin() {
 		setTimeout("timeloop()",1000);
 	})
 	.fail(function(a,b,e) {
+		delCookie("auth"); // this is needed when password is changed
+        	delCookie("username");
 		clearTimeout(loadingTimeout);
 		var message
 		if (!e.responseText) {
