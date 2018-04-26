@@ -16,6 +16,10 @@ var tempAuth = getCookie("auth");
 		auth.string = tempAuth;
 		afterLogin();
 	}
+	if('serviceWorker' in navigator) { //pretending a service worker will speed up "add to homescreen" function in android
+		navigator.serviceWorker.register('/sw.js');
+	}
+
 });
 
 $("#position_area")
