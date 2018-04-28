@@ -118,7 +118,7 @@ function getSettings() {
 	})
 	.fail(function(e) {
 		errorCount = errorCount + 1;
-		if (errorCount>3) {
+		if (errorCount>3 && errorCount<=10) {
 			var message
 			if (e.responseText == "") {message = "keine Verbindung"} else {message = e.responseText}
 			$.mobile.loading( "show", {
@@ -128,7 +128,11 @@ function getSettings() {
 			});
 		}
 		if (errorCount>10) {
-			location.reload();
+			$.mobile.loading( "show", {
+                                text: "keine Verbindung",
+                                textVisible: true,
+                                textonly: true
+                        });
 		}
 	})
 };
