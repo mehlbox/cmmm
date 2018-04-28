@@ -17,8 +17,8 @@
 			/*touch-action: none;*/
 			/*scrollView.bounces = false;*/
 			}
-  	#infoBoxSet	{ display: none; color: gray;}
-	.infoBox	{ font-size: 1em; padding: 0.5em;}
+  	#infoBoxSet	{ display: none; fill: gray;}
+	.infoBox	{ font-weight: bold; font-size: 1.8em; }
   /* admin menu */
   .ui-collapsible-content {
     padding: 0;
@@ -29,7 +29,7 @@
   }
 
   .indexListTop {border-top: 0.2em solid #bbffaa;}
-  #loaded       {font-weight: bold; display: none;}
+  #loaded       {font-weight: bold; display: none; font-size: 2em; font-family: sans-serif;}
   #wrapper       {display: none;}
   #navHome,#memLoad,#memSave { font-size: 0.9em }
 </style>
@@ -41,16 +41,16 @@
 <body>
 <div data-role="page">
   <div id="wrapper">
-  	<div data-role="header">
-  		<div class="infoBox" id="infoBoxCurrent">Höhe: <span id="y_num_current"></span> - Tiefe: <span id="x_num_current"></span></div>
-      <div class="infoBox" id="infoBoxSet">Höhe: <span id="y_num_set"></span> - Tiefe: <span id="x_num_set"></span></div>
-  			<div class="ui-btn-right fine_box">
-  				<select name="fine" id="fine" data-role="flipswitch" data-inline="true">
-  					<option value="coarse">grob</option>
-  					<option value="fine">fein</option>
-  				</select>
-  			</div>
-  	</div><!--header-->
+    <div data-role="header">
+      <!--div class="infoBox" id="infoBoxCurrent">Höhe: <span id="y_num_current"></span> - Tiefe: <span id="x_num_current"></span></div>
+      <div class="infoBox" id="infoBoxSet">Höhe: <span id="y_num_set"></span> - Tiefe: <span id="x_num_set"></span></div-->
+      <div class="ui-btn-right fine_box">
+  	<select name="fine" id="fine" data-role="flipswitch" data-inline="true">
+  	  <option value="coarse">grob</option>
+  	  <option value="fine">fein</option>
+        </select>
+      </div>
+    </div><!--header-->
   	<div id="position_area">
   		<svg id="svg" viewBox="0 0 599 399">
   			<polygon  points="0,348 20,348 20,364 80,364 80,380 140,380 140,400 0,400" style="fill:gray;" /> <!-- stage steps -->
@@ -64,7 +64,9 @@
   			<polyline id="current-line1" points="0,0 0,0" style="fill:none;stroke:black;stroke-width:2;" />
   			<polyline id="current-line2" points="0,0 0,0" style="fill:none;stroke:black;stroke-width:2;" />
   			<circle id="current-mic" cx="0" cy="0" r="8" fill="black" />
-		        <text id="loaded" x="30" y="350" font-family="sans-serif" font-size="28"></text>
+		        <text id="loaded" x="30" y="350"></text>
+			<text x="150" y="25" class="infoBox" id="infoBoxCurrent">Höhe: <tspan id="y_num_current"></tspan> - Tiefe: <tspan id="x_num_current"></tspan></text>
+			<text x="150" y="25" class="infoBox" id="infoBoxSet">Höhe: <tspan id="y_num_set"></tspan> - Tiefe: <tspan id="x_num_set"></tspan></text>
   		</svg>
   	</div><!--position_area-->
     <div class="ui-grid-a">
