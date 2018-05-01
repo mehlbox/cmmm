@@ -32,6 +32,7 @@
   #loaded       {font-weight: bold; display: none; font-size: 2em; font-family: sans-serif;}
   #wrapper       {display: none;}
   #navHome,#memLoad,#memSave { font-size: 0.9em }
+  .ui-btn-icon-notext  { margin-top: 0.3em !important; margin-left: 0.3em !important; }
 </style>
   <script src="jquery/jquery-2.1.4.min.js"></script>
   <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
@@ -42,8 +43,11 @@
 <div data-role="page">
   <div id="wrapper">
     <div data-role="header">
-      <!--div class="infoBox" id="infoBoxCurrent">Höhe: <span id="y_num_current"></span> - Tiefe: <span id="x_num_current"></span></div>
-      <div class="infoBox" id="infoBoxSet">Höhe: <span id="y_num_set"></span> - Tiefe: <span id="x_num_set"></span></div-->
+      <form>
+        <input type="button" data-icon="delete"  data-iconpos="notext" value="Icon only" id="logout">
+	<input type="button" data-icon="alert"   data-iconpos="notext" value="Icon only" id="emergencyStop">
+        <input type="button" data-icon="refresh" data-iconpos="notext" value="Icon only" id="reloadPage">
+      </form>
       <div class="ui-btn-right fine_box">
   	<select name="fine" id="fine" data-role="flipswitch" data-inline="true">
   	  <option value="coarse">grob</option>
@@ -65,8 +69,8 @@
   			<polyline id="current-line2" points="0,0 0,0" style="fill:none;stroke:black;stroke-width:2;" />
   			<circle id="current-mic" cx="0" cy="0" r="8" fill="black" />
 		        <text id="loaded" x="30" y="350"></text>
-			<text x="150" y="25" class="infoBox" id="infoBoxCurrent">Höhe: <tspan id="y_num_current"></tspan> - Tiefe: <tspan id="x_num_current"></tspan></text>
-			<text x="150" y="25" class="infoBox" id="infoBoxSet">Höhe: <tspan id="y_num_set"></tspan> - Tiefe: <tspan id="x_num_set"></tspan></text>
+			<text x="150" y="28" class="infoBox" id="infoBoxCurrent">Höhe: <tspan id="y_num_current"></tspan> - Tiefe: <tspan id="x_num_current"></tspan></text>
+			<text x="150" y="28" class="infoBox" id="infoBoxSet">Höhe: <tspan id="y_num_set"></tspan> - Tiefe: <tspan id="x_num_set"></tspan></text>
   		</svg>
   	</div><!--position_area-->
     <div class="ui-grid-a">
@@ -138,6 +142,14 @@
         </div><!--area-->
         <div id="motor" class="ui-content">
           <ul data-role="listview" data-inset="false">
+            <li class="ui-body"><h3>power supply:</h3>
+              <div class="ui-grid-a ui-body-a">
+                <div class="ui-block-a"><div class="ui-bar ui-bar-b">left side:</div></div>
+                <div class="ui-block-b"><div class="ui-bar ui-bar-b">right side:</div></div>
+                <div class="ui-block-a"><div class="ui-bar ui-bar-a" id="voltageLeft">0 V</div></div>
+                <div class="ui-block-b"><div class="ui-bar ui-bar-a" id="voltageRight">0 V</div></div>
+              </div>
+            </li>
             <li>rotational direction
               <div class="ui-grid-a">
                 <div class="ui-block-a">
@@ -166,7 +178,6 @@
                 </div>
               </div>
             </li>
-	<form>
             <li>spool size in mm
               <div class="ui-grid-a">
                 <div class="ui-block-a">
@@ -205,7 +216,6 @@
                 </div>
               </div>
             </li>
-	</form>
             <li>
               <fieldset class="ui-grid-a">
                 <div class="ui-block-a"><a href="#" id="option_cancel" data-role="button" data-icon="delete">Cancel</a></div>
@@ -297,7 +307,7 @@
               <li><a href="#" id="adminExit" data-role="button">exit admin mode</a></li>
 	      <li><a href="#" id="adminKill" data-role="button">kill application</a></li>
               <li><a href="#" id="adminReboot" data-role="button">reboot device</a></li>
-              <li><a href="#" id="adminShutdown" data-role="button">shutdown device</a></li>
+              <!--li><a href="#" id="adminShutdown" data-role="button">shutdown device</a></li-->
               <li><a href="#" id="adminI2Cscan" data-role="button">I2C scan</a></li>
               <li><a href="#" id="adminReadMemory" data-role="button">read memory</a></li>
               <li class="indexList"><h2>delete slot:</h2>
@@ -338,23 +348,15 @@
             </div>
 	</form>
           </li>
-          <li>
+          <!--li>
             <div class="ui-grid-a">
-              <!--div class="ui-block-a"><a href="#" id="stop" class="ui-btn ui-shadow ui-corner-all ui-icon-alert ui-btn-icon-left">Stop</a></div>
-              <div class="ui-block-b"><a href="#" id="send" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left loading-icon">Start</a></div-->
+              <div class="ui-block-a"><a href="#" id="stop" class="ui-btn ui-shadow ui-corner-all ui-icon-alert ui-btn-icon-left">Stop</a></div>
+              <div class="ui-block-b"><a href="#" id="send" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-left loading-icon">Start</a></div>
               <div class="ui-block-a"><a href="#" id="emergencyStop" class="ui-btn ui-shadow ui-corner-all ui-icon-alert   ui-btn-icon-left">Not aus!</a></div>
               <div class="ui-block-b"><a href="#" id="reloadPage"    class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-left">neu laden</a></div>
 	      <div class="ui-block-a"><a href="#" id="logout" class="ui-btn ui-shadow ui-corner-all ui-icon-delete   ui-btn-icon-left">abmelden</a></div>
             </div>
-          </li>
-          <li class="ui-body"><h3>Spannungsversorgung:</h3>
-            <div class="ui-grid-a ui-body-a">
-              <div class="ui-block-a"><div class="ui-bar ui-bar-b">Links:</div></div>
-              <div class="ui-block-b"><div class="ui-bar ui-bar-b">Rechts:</div></div>
-              <div class="ui-block-a"><div class="ui-bar ui-bar-a" id="voltageLeft">0 V</div></div>
-              <div class="ui-block-b"><div class="ui-bar ui-bar-a" id="voltageRight">0 V</div></div>
-            </div>
-          </li>
+          </li-->
     		</ul>
     	</div><!-- home -->
     	<div id="mem" class="ui-content">
@@ -401,7 +403,7 @@
           </div>
       </form>
   </div>
-  <div data-role="footer" data-position="fixed" data-tap-toggle="false">ceileing mounted motorized microphone</div>
+  <!--div data-role="footer" data-position="fixed" data-tap-toggle="false">ceileing mounted motorized microphone</div-->
 </div><!-- wrapper -->
 </div><!--page-->
 <script src="js/index.js"></script>
