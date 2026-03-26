@@ -129,6 +129,8 @@ def set_position():
 	return
 
 def calibrateSingle(motor, amount):
+	address = None
+	motorNR = None
 	if motor == 1:
 		address = unit1 # left
 		motorNR = 1  	# front
@@ -141,6 +143,8 @@ def calibrateSingle(motor, amount):
 	if motor == 4:
 		address = unit2 # right
 		motorNR = 2  	# back
+	if address == None or motorNR == None:
+		return
 	if motorNR == 1:
 		voh = 1
 	else:
@@ -178,6 +182,8 @@ def set_option():
 	return
 
 def invertMotor(motor):
+	address = None
+	motorNR = None
 	if motor == 1:
 		address = 11 # left
 		motorNR = 1  # front
@@ -190,6 +196,8 @@ def invertMotor(motor):
 	if motor == 4:
 		address = 12 # right
 		motorNR = 2  # back
+	if address == None or motorNR == None:
+		return
 	sendval = []
 	sendval.append(motorNR)
 	bus.write_i2c_block_data(address,5,sendval)

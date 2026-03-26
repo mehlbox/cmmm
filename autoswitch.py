@@ -11,15 +11,15 @@ GPIO.setup(4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 try:
     while True:
-		if GPIO.input(4) == 1 and previous == False:
-			print "Console turned off"
-			previous = True
-			os.system('curl -d \'{"slot":100, "name":"Parkposition"}\' -X POST '+url)
-		elif GPIO.input(4) == 0 and previous == True:
-			print "Console turned on"
-			previous = False
-			os.system('curl -d \'{"slot":1, "name":"Standard"}\' -X POST '+url)
-		sleep(0.1)
+        if GPIO.input(4) == 1 and previous == False:
+            print "Console turned off"
+            previous = True
+            os.system('curl -d \'{"slot":100, "name":"Parkposition"}\' -X POST ' + url)
+        elif GPIO.input(4) == 0 and previous == True:
+            print "Console turned on"
+            previous = False
+            os.system('curl -d \'{"slot":1, "name":"Standard"}\' -X POST ' + url)
+        sleep(0.1)
 
 finally:
-	GPIO.cleanup()
+    GPIO.cleanup()

@@ -69,8 +69,8 @@
   			<polyline id="current-line2" points="0,0 0,0" style="fill:none;stroke:black;stroke-width:2;" />
   			<circle id="current-mic" cx="0" cy="0" r="8" fill="black" />
 		        <text id="loaded" x="30" y="350"></text>
-			<text x="150" y="28" class="infoBox" id="infoBoxCurrent">Höhe: <tspan id="y_num_current"></tspan> - Tiefe: <tspan id="x_num_current"></tspan></text>
-			<text x="150" y="28" class="infoBox" id="infoBoxSet">Höhe: <tspan id="y_num_set"></tspan> - Tiefe: <tspan id="x_num_set"></tspan></text>
+			<text x="150" y="28" class="infoBox" id="infoBoxCurrent">H&ouml;he: <tspan id="y_num_current"></tspan> - Tiefe: <tspan id="x_num_current"></tspan></text>
+			<text x="150" y="28" class="infoBox" id="infoBoxSet">H&ouml;he: <tspan id="y_num_set"></tspan> - Tiefe: <tspan id="x_num_set"></tspan></text>
   		</svg>
   	</div><!--position_area-->
     <div class="ui-grid-a">
@@ -93,9 +93,9 @@
     				<li>
               <form>
     		        <div data-role="rangeslider">
-                  <label for="range_y_min">mix max border height in mm</label>
+                  <label for="range_y_min">min/max border height in mm</label>
                   <input type="range" name="range_y_min" id="range_y_min" min="0" max="0" value="0">
-                  <label for="range_y_max">mix max border height in mm</label>
+                  <label for="range_y_max">min/max border height in mm</label>
                   <input type="range" name="range_y_max" id="range_y_max" min="0" max="0" value="0">
                 </div>
               </form>
@@ -103,9 +103,9 @@
     				<li>
               <form>
                 <div data-role="rangeslider">
-                  <label for="range_x_min">mix max border depth</label>
+                  <label for="range_x_min">min/max border depth</label>
                   <input type="range" name="range_x_min" id="range_x_min" min="0" max="0" value="0">
-                  <label for="range_x_max">mix max border depth</label>
+                  <label for="range_x_max">min/max border depth</label>
                   <input type="range" name="range_x_max" id="range_x_max" min="0" max="0" value="0">
                 </div>
               </form>
@@ -335,7 +335,7 @@
             <div class="ui-grid-a">
               <div class="ui-block-a">
                 <div class="ui-bar">
-                  <label for="directCoordinateY">Höhe:</label>
+                  <label for="directCoordinateY">H&ouml;he:</label>
                   <input type="number" name="directCoordinateY" pattern="[0-9]*" id="directCoordinateY" value="0">
                 </div>
               </div>
@@ -366,7 +366,7 @@
             <input type="text" class="ui-state-disabled" name="memIndexName" id="memIndexName" placeholder="memIndexName" value="">
             <div class="ui-grid-a">
               <div class="ui-block-a">
-                <div class="ui-bar" >Höhe:<br><span id="memIndexY"></span> cm
+                <div class="ui-bar" >H&ouml;he:<br><span id="memIndexY"></span> cm
                 </div>
               </div>
               <div class="ui-block-b">
@@ -385,25 +385,25 @@
     	</div><!-- mem -->
     </div>
     <div data-role="popup" id="popupDialog" style="max-width:400px;">
-        <div role="main" class="ui-content">
-            <h3 class="ui-title">Speicherplatz wird überschrieben<br> Willst du wirklich?</h3>
-            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="back">Nein</a>
-            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="back" id="popupConfirm">Ja</a>
-        </div>
+    <div role="main" class="ui-content">
+        <h3 class="ui-title">Speicherplatz wird &uuml;berschrieben<br> Willst du wirklich?</h3>
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="back">Nein</a>
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="back" id="popupConfirm">Ja</a>
+    </div>
     </div>
   <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all" data-position-to="window" data-history="false" data-dismissible="false">
-      <form>
-          <div style="padding:10px 20px;">
-              <h3>Bitte anmelden</h3>
-              <label for="un" class="ui-hidden-accessible">Benutzer:</label>
-              <input type="text" name="user" id="un" value="" placeholder="Benutzername" data-theme="a" autocomplete="on">
-              <label for="pw" class="ui-hidden-accessible">Passwort:</label>
-              <input type="password" name="pass" id="pw" value="" placeholder="Passwort" data-theme="a" autocomplete="on">
-              <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" id="loginSubmit">anmelden</button>
-          </div>
-      </form>
+    <form>
+        <div style="padding:10px 20px;">
+            <h3>Bitte anmelden</h3>
+            <label for="un" class="ui-hidden-accessible">Benutzer:</label>
+            <input type="text" name="user" id="un" value="" placeholder="Benutzername" data-theme="a" autocomplete="on">
+            <label for="pw" class="ui-hidden-accessible">Passwort:</label>
+            <input type="password" name="pass" id="pw" value="" placeholder="Passwort" data-theme="a" autocomplete="on">
+            <button class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check" id="loginSubmit">anmelden</button>
+        </div>
+    </form>
   </div>
-  <!--div data-role="footer" data-position="fixed" data-tap-toggle="false">ceileing mounted motorized microphone</div-->
+  <!--div data-role="footer" data-position="fixed" data-tap-toggle="false">ceiling mounted motorized microphone</div-->
 </div><!-- wrapper -->
 </div><!--page-->
 <script src="js/index.js"></script>

@@ -63,15 +63,17 @@ function afterLogin() {
 		$.mobile.loading( "hide" )
 		setTimeout("timeloop()",1000);
 	})
-	.fail(function(a,b,e) {
+	.fail(function(xhr, statusText, errorThrown) {
 		delCookie("auth"); // this is needed when password is changed
         	delCookie("username");
 		clearTimeout(loadingTimeout);
 		var message
-		if (!e.responseText) {
-			message = b
+		if (xhr && xhr.responseText) {
+			message = xhr.responseText
+		} else if (errorThrown) {
+			message = errorThrown
 		} else {
-			message = e.responseText
+			message = statusText
 		}
 		$.mobile.loading( "show", {
 			text: message,
@@ -194,6 +196,23 @@ function get_option() {
 	})
 };
 
+function updateCurrentCoordinateFromLength() {
+	var x, y, radicand;
+	x = (Math.pow(line.current.lengh.front,2) + Math.pow(area.dimension.x,2) - Math.pow(line.current.lengh.back,2)) / (2 * area.dimension.x);
+	radicand = Math.pow(line.current.lengh.front,2) - Math.pow(x,2) - Math.pow(area.dimension.z/2,2);
+	if (radicand < 0) {
+		radicand = 0;
+	}
+	y = Math.sqrt(radicand);
+	if (isNaN(x) || isNaN(y)) {
+		return false;
+	}
+	line.current.coordinate = line.current.coordinate || {};
+	line.current.coordinate.x = x;
+	line.current.coordinate.y = area.dimension.y - y;
+	return true;
+}
+
 function draw(obj) {
 	var x, y
 	if (obj.id == "current" || obj.id == "target") {
@@ -237,7 +256,7 @@ function check_set (x,y) {
 		if (y > area.range.y.max) y = area.range.y.max;
 		if (y < area.range.y.min) y = area.range.y.min;
 	}
-	if (x) {
+	if (x !== undefined && x !== null && y !== undefined && y !== null) {
 		line.set.coordinate = {};
 		line.set.coordinate.x = x;
 		line.set.coordinate.y = y;
@@ -278,7 +297,7 @@ function create_memIndexList() {
 			if (memory[index].name == "") memory[index].name = "- ohne Bezeichnung -"
 			if (memory[index].x == 0) { memory[index].x = 5500; memory[index].y = 2200; }
 			//if (index > 0 && index <= 9)
-			$("#memIndexList").append('<li class="indexListTop"><a href=# onclick="callSlot('+index+');">'+memory[index].name+'</a><div class="ui-grid-a"><div class="ui-block-a"><div class="ui-bar">Höhe:<br>'+parseInt((memory[index].y/10)+0.5)+' cm</div></div><div class="ui-block-b"><div class="ui-bar">Tiefe:<br>'+parseInt((memory[index].x/10)+0.5)+' cm</div></div></div></li>');
+			$("#memIndexList").append('<li class="indexListTop"><a href=# onclick="callSlot('+index+');">'+memory[index].name+'</a><div class="ui-grid-a"><div class="ui-block-a"><div class="ui-bar">H\u00f6he:<br>'+parseInt((memory[index].y/10)+0.5)+' cm</div></div><div class="ui-block-b"><div class="ui-bar">Tiefe:<br>'+parseInt((memory[index].x/10)+0.5)+' cm</div></div></div></li>');
 		}
 	});
 	if (option.loaded) $("#memIndexSlider").val(option.loaded.slot).change();
@@ -302,7 +321,7 @@ function callSlot(e) {
 	if (navSelect == "save") {
 		if (auth.un != "admin" && (e == 1 || e == 100)) {
 			$.mobile.loading( "show", {
-				text: "schreibgeschützt",
+				text: "schreibgesch\u00fctzt",
 				textVisible: true,
 				textonly: true
 			});
@@ -370,11 +389,15 @@ function saveSlot(e) {
                         textVisible: true
                 });
         }, 500);
-	var x, y
-	x = (Math.pow(line.current.lengh.front,2)+Math.pow(area.dimension.x,2)-Math.pow(line.current.lengh.back,2))/(2*area.dimension.x);
-	y = Math.sqrt(Math.pow(line.current.lengh.front,2)-Math.pow(x,2)-Math.pow(area.dimension.z/2,2));
-	line.current.coordinate.x = x;
-	line.current.coordinate.y = area.dimension.y - y;
+	if (!updateCurrentCoordinateFromLength()) {
+		clearTimeout(loadingTimeout);
+		$.mobile.loading( "show", {
+			text: "invalid current position",
+			textVisible: true,
+			textonly: true
+		});
+		return;
+	}
 	savePackage[e] = {}
 	savePackage[e].x = parseInt(line.current.coordinate.x);
 	savePackage[e].y = parseInt(line.current.coordinate.y);
@@ -451,10 +474,14 @@ function empty() {
 
 function setCookie(cname, cvalue) {
     var d = new Date();
-	cvalue = cvalue.replace(/;/g,"\\semi");
+	cvalue = encodeURIComponent(cvalue);
     d.setTime(d.getTime() + (30*24*60*60*1000));
     var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+    var cookie = cname + "=" + cvalue + "; " + expires + "; path=/; SameSite=Lax";
+    if (location.protocol === "https:") {
+    	cookie += "; Secure";
+    }
+    document.cookie = cookie;
 }
 
 function getCookie(cname) {
@@ -468,7 +495,9 @@ function getCookie(cname) {
         }
         if (c.indexOf(name) == 0) {
 			cvalue = c.substring(name.length,c.length);
-			cvalue = cvalue.replace(/\\semi/g,";");
+			try {
+				cvalue = decodeURIComponent(cvalue);
+			} catch (e) {}
             return cvalue;
         }
     }
@@ -476,5 +505,5 @@ function getCookie(cname) {
 }
 
 function delCookie(cname) {
-    document.cookie = cname+'=; Max-Age=-99999999;';
+    document.cookie = cname + '=; Max-Age=-99999999; path=/;';
 }

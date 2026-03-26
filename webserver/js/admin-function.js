@@ -69,7 +69,7 @@ function create_deleteIndexList() {
 	Object.keys(memory).forEach(function (index, element) {
 		if ( index > 0 && index <= 100 ) {
 			if (memory[index].name == "") memory[index].name = "- ohne Bezeichnung -"
-			if (index > 9 && index <= 99) $("#deleteIndexList").append('<li><a href=# onclick="deleteSlot('+index+');">'+memory[index].name+'</a><div class="ui-grid-a"><div class="ui-block-a"><div class="ui-bar">Höhe:<br>'+parseInt((memory[index].y/10)+0.5)+' cm</div></div><div class="ui-block-b"><div class="ui-bar">Tiefe:<br>'+parseInt((memory[index].x/10)+0.5)+' cm</div></div></div></li>');
+			if (index > 9 && index <= 99) $("#deleteIndexList").append('<li><a href=# onclick="deleteSlot('+index+');">'+memory[index].name+'</a><div class="ui-grid-a"><div class="ui-block-a"><div class="ui-bar">H\u00f6he:<br>'+parseInt((memory[index].y/10)+0.5)+' cm</div></div><div class="ui-block-b"><div class="ui-bar">Tiefe:<br>'+parseInt((memory[index].x/10)+0.5)+' cm</div></div></div></li>');
 		}
 	});
 	$('#deleteIndexList').listview('refresh');

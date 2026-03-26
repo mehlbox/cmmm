@@ -106,27 +106,53 @@ $("#option_send").click( function() { //needs spool calculation here
 		text: "senden",
 		textVisible: true
 	});
-	$("#stop").trigger("click");
+	if (!updateCurrentCoordinateFromLength()) {
+		$.mobile.loading( "show", {
+			text: "invalid current position",
+			textVisible: true,
+			textonly: true
+		});
+		return;
+	}
 	$.ajax({
 		xhrFields: { withCredentials: true },
 		beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Basic ' + auth.string) },
 		method: "POST",
-		url: server.protocol+"://"+server.host+":"+server.port+"/option",
+		url: server.protocol+"://"+server.host+":"+server.port+"/target",
 		timeout: 5000,
 		dataType: "text",
 		contentType: "application/json; charset=utf-8",
-		data: JSON.stringify(option)
+		data: JSON.stringify(line.current.coordinate)
 	})
-	.done(function(receive) {
-		$.mobile.loading( "hide" );
+	.done(function() {
+		$.ajax({
+			xhrFields: { withCredentials: true },
+			beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Basic ' + auth.string) },
+			method: "POST",
+			url: server.protocol+"://"+server.host+":"+server.port+"/option",
+			timeout: 5000,
+			dataType: "text",
+			contentType: "application/json; charset=utf-8",
+			data: JSON.stringify(option)
+		})
+		.done(function() {
+			$.mobile.loading( "hide" );
+		})
+		.fail(function(e) {
+			$.mobile.loading( "show", {
+				text: e.responseText,
+				textVisible: true,
+				textonly: true
+			})
+		});
 	})
-	.fail(function(e) {
+	.fail(function() {
 		$.mobile.loading( "show", {
-			text: e.responseText,
+			text: "fehlgeschlagen",
 			textVisible: true,
 			textonly: true
 		})
-	})
+	});
 });
 
 $("#option_cancel").click( function() {
@@ -197,7 +223,11 @@ $("#adminReadMemory").click( function() {
 		timeout: 4000
 	})
 	.always(function(data) {
-		$("#adminOutput").html(JSON.stringify(data, null, 2));
+		var output = data && data.responseText ? data.responseText : "";
+		try {
+			output = JSON.stringify(JSON.parse(output), null, 2);
+		} catch (e) {}
+		$("#adminOutput").html(output);
 	})
 });
 

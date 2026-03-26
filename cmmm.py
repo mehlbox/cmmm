@@ -43,6 +43,11 @@ class myHandler(BaseHTTPRequestHandler):
 		elif self.path ==  "/load":
 			globals.option["loaded"] = json.loads(post_data)
 			tempSlot = str(globals.option["loaded"]["slot"])
+			if not tempSlot in globals.memory:
+				self.send_response(404)
+				self.end_headers()
+				self.wfile.write("slot not found")
+				return
 			globals.line["target"]["coordinate"]["x"] = globals.memory[tempSlot]["x"]
 			globals.line["target"]["coordinate"]["y"] = globals.memory[tempSlot]["y"]
 			globals.checkLimits()
@@ -110,7 +115,18 @@ class myHandler(BaseHTTPRequestHandler):
 			self.end_headers()
 
 		elif self.path ==  "/deleteSlot":
-			del globals.memory[str(json.loads(post_data)["slot"])]
+			tempSlot = str(json.loads(post_data)["slot"])
+			if tempSlot == "1" or tempSlot == "100":
+				self.send_response(423)
+				self.end_headers()
+				self.wfile.write("protected slot")
+				return
+			if not tempSlot in globals.memory:
+				self.send_response(404)
+				self.end_headers()
+				self.wfile.write("slot not found")
+				return
+			del globals.memory[tempSlot]
 			memoryF = open("memory.json","w")
 			memoryF.write(json.dumps(globals.memory,indent=4, sort_keys=True))
 			memoryF.close()
@@ -143,6 +159,7 @@ class myHandler(BaseHTTPRequestHandler):
 			self.end_headers()
 			self.wfile.write("i2c error")
 			print "i2c error"
+			return
 
 		if globals.option["voltage"]["unit1"] < 8000000:
 			checked = False
@@ -153,6 +170,7 @@ class myHandler(BaseHTTPRequestHandler):
 			self.wfile.write("power loss unit 1\n")
 			self.wfile.write("Voltage: " + str(globals.option["voltage"]["unit1"]) + "\n")
 			print "power loss unit 1"
+			return
 
 		if globals.option["voltage"]["unit2"] < 8000000:
 			checked = False
@@ -161,9 +179,10 @@ class myHandler(BaseHTTPRequestHandler):
 			self.send_header('Content-type','application/json') # intentionally producing an error in jquery
 			self.end_headers()
 			self.wfile.write("power loss unit 2\n")
-			self.wfile.write("Voltage: " + str(globals.option["voltage"]["unit1"]) + "\n")
+			self.wfile.write("Voltage: " + str(globals.option["voltage"]["unit2"]) + "\n")
 			self.wfile.write(json.dumps(globals.option))
 			print "power loss unit 2"
+			return
 
 		if checked == True:
 			self.send_response(200)
@@ -172,7 +191,12 @@ class myHandler(BaseHTTPRequestHandler):
 			# Send the html message
 			if self.path ==  "/line":
 				if time() - lastCall > 0.8: #prevent too much i2c
-					globals.get_current()
+					try:
+						globals.get_current()
+					except:
+						checked = False
+						self.wfile.write("i2c error")
+						return
 					lastCall = time()
 				self.wfile.write(json.dumps(globals.line))
 
@@ -221,7 +245,12 @@ class myHandler(BaseHTTPRequestHandler):
 
 			elif self.path ==  "/all":
 				if time() - lastCall > 0.8: #prevent too much i2c
-					globals.get_current()
+					try:
+						globals.get_current()
+					except:
+						checked = False
+						self.wfile.write("i2c error")
+						return
 					lastCall = time()
 				tempAll = {"line":{}, "option":{}, "area":{}}
 				tempAll["line"]   = globals.line

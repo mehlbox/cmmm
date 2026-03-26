@@ -7,6 +7,36 @@ var navSelect;
 var errorCount;
 var auth = {}
 
+if (typeof Object.assign !== "function") {
+	Object.assign = function(target) {
+		if (target == null) {
+			throw new TypeError("Cannot convert undefined or null to object");
+		}
+		var to = Object(target);
+		for (var i = 1; i < arguments.length; i++) {
+			var source = arguments[i];
+			if (source != null) {
+				for (var key in source) {
+					if (Object.prototype.hasOwnProperty.call(source, key)) {
+						to[key] = source[key];
+					}
+				}
+			}
+		}
+		return to;
+	};
+}
+
+function encodeBasicAuth(username, password) {
+	var plain = username + ":" + password;
+	try {
+		return btoa(plain);
+	} catch (e) {
+		// Supports non-ASCII credentials on older browsers.
+		return btoa(unescape(encodeURIComponent(plain)));
+	}
+}
+
 $(document).ready(function() {
 var tempAuth = getCookie("auth");
 	if (tempAuth == "") {
@@ -208,16 +238,20 @@ $("#emergencyStop").click( function() {
 
 $("#stop").click( function() {
 	var loadingTimeout = setTimeout(function() {
-                $.mobile.loading( "senden", {
+                $.mobile.loading( "show", {
                         text: "laden",
                         textVisible: true
                 });
         }, 500);
-	var x, y
-	x = (Math.pow(line.current.lengh.front,2)+Math.pow(area.dimension.x,2)-Math.pow(line.current.lengh.back,2))/(2*area.dimension.x);
-	y = Math.sqrt(Math.pow(line.current.lengh.front,2)-Math.pow(x,2)-Math.pow(area.dimension.z/2,2));
-	line.current.coordinate.x = x;
-	line.current.coordinate.y = area.dimension.y - y;
+	if (!updateCurrentCoordinateFromLength()) {
+		clearTimeout(loadingTimeout);
+		$.mobile.loading( "show", {
+			text: "invalid current position",
+			textVisible: true,
+			textonly: true
+		});
+		return;
+	}
 	$.ajax({
 		xhrFields: { withCredentials: true },
 		beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Basic ' + auth.string) },
@@ -248,7 +282,7 @@ $("#stop").click( function() {
 
 $("#send").click( function() {
 	var loadingTimeout = setTimeout(function() {
-                $.mobile.loading( "senden", {
+                $.mobile.loading( "show", {
                         text: "laden",
                         textVisible: true
                 });
@@ -302,7 +336,7 @@ $("#logout").click( function() {
 $("#loginSubmit").click (function() {
 	auth.un = $("#un").val();
 	auth.pw = $("#pw").val();
-	auth.string = btoa(auth.un + ":" + auth.pw);
+	auth.string = encodeBasicAuth(auth.un, auth.pw);
 	auth.pw = "";
 	$("#popupLogin").popup("close");
 	afterLogin();
@@ -316,7 +350,7 @@ $(document).mouseup(function(e) {
 		}
 });
 
-$(document).touchend(function() {
+$(document).on("touchend", function() {
     $(document).off("touchmove", "#position_area");
 		if ($("#fine option:selected").prop("value") != "fine") {
 			$("#infoBoxCurrent").show();
