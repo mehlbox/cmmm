@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import smbus
 import json
 import math

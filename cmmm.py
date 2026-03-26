@@ -64,6 +64,7 @@ class myHandler(BaseHTTPRequestHandler):
 			print "calibrate single"
 			globals.line["target"]["steps"] = globals.line["current"]["steps"]
 			calibrateSingleData = json.loads(post_data)
+			print calibrateSingleData
 			globals.calibrateSingle(calibrateSingleData["motor"], calibrateSingleData["amount"])
 			globals.set_target()
 			self.send_response(200)
@@ -149,7 +150,8 @@ class myHandler(BaseHTTPRequestHandler):
 			self.send_response(200)
 			self.send_header('Content-type','application/json') # intentionally producing an error in jquery
 			self.end_headers()
-			self.wfile.write("power loss unit 1")
+			self.wfile.write("power loss unit 1\n")
+			self.wfile.write("Voltage: " + str(globals.option["voltage"]["unit1"]) + "\n")
 			print "power loss unit 1"
 
 		if globals.option["voltage"]["unit2"] < 8000000:
@@ -158,7 +160,9 @@ class myHandler(BaseHTTPRequestHandler):
 			self.send_response(200)
 			self.send_header('Content-type','application/json') # intentionally producing an error in jquery
 			self.end_headers()
-			self.wfile.write("power loss unit 2")
+			self.wfile.write("power loss unit 2\n")
+			self.wfile.write("Voltage: " + str(globals.option["voltage"]["unit1"]) + "\n")
+			self.wfile.write(json.dumps(globals.option))
 			print "power loss unit 2"
 
 		if checked == True:
@@ -235,7 +239,4 @@ try:
 
 except KeyboardInterrupt:
 	print '^C received, shutting down the web server'
-	server.socket.close()
-
-finally:
 	server.socket.close()

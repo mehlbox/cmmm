@@ -1,7 +1,7 @@
 var line	= { set:{id:"set"}, current:{id:"current"}, target:{id:"target"}, speed:{ coordinate:{}}, animation:{id:"current"} }
 var area	= { }
 var option	= { }
-var server	= { protocol: "https", host: "service."+location.hostname, port: "443" }
+var server	= { protocol: "https", host: "service-"+location.hostname, port: "443" }
 var memory	= { }
 var navSelect;
 var errorCount;

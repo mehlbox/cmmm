@@ -18,8 +18,8 @@ try:
 		elif GPIO.input(4) == 0 and previous == True:
 			print "Console turned on"
 			previous = False
-			os.system('curl -d \'{"slot":1, "name":"Standart"}\' -X POST '+url)
+			os.system('curl -d \'{"slot":1, "name":"Standard"}\' -X POST '+url)
 		sleep(0.1)
-		
+
 finally:
 	GPIO.cleanup()

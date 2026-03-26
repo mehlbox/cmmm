@@ -82,7 +82,7 @@ function calibrateSingle(motor,direction) {
 	});
 	var sendPackage = {};
 	sendPackage.motor  = motor;
-	sendPackage.amount = $("#calibrationSlider").val() * direction
+	sendPackage.amount = $("#calibrationSlider").val() * direction;
 	$.ajax({
 		xhrFields: { withCredentials: true },
 		beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Basic ' + auth.string) },

@@ -265,7 +265,7 @@ function create_memIndexList() {
 	$("#memIndexList").html("");
 	Object.keys(memory).forEach(function (index, element) {
 		if ( index > 0 && index <= 100 ) {
-			if (index == 1) memory[index].name = "Standart";
+			if (index == 1) memory[index].name = "Standard";
 			if (index == 2) memory[index].name = "Gemeindechor";
 			if (index == 3) memory[index].name = "Jugendchor";
 			if (index == 4) memory[index].name = "Jungscharchor";
